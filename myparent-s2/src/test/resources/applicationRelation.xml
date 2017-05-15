@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.1.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean id="people" class="com.relations.People" depends-on="car">
+        <property name="name" value="people"/>
+        <property name="age" value="100"/>
+        <property name="address" ref="address2"/>
+        <property name="car" ref="car"/>
+    </bean>
+    <bean id="car" class="com.beans.Car" scope="singleton">
+        <property name="brand" value="benz"/>
+        <property name="corp" value="german"/>
+        <property name="price" value="500000"/>
+        <property name="maxSpeed" value="400"/>
+    </bean>
+
+    <bean id="address1" class="com.relations.Address" abstract="true">
+        <property name="province" value="guangdong"/>
+        <property name="city" value="guangzhou"/>
+        <property name="street" value="xiaoguwei"/>
+    </bean>
+
+    <bean id="address2" class="com.relations.Address" parent="address1">
+        <property name="street" value="xishisi"/>
+    </bean>
+
+
+</beans>

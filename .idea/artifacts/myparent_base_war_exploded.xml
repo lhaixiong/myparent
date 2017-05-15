@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="myparent-base:war exploded">
+    <output-path>$PROJECT_DIR$/myparent-base/target/myparent-base</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="myparent-base" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="G:\ideaworkplace\myparent\myparent-base\target/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="myparent-base/web/Web" />
+    </root>
+  </artifact>
+</component>

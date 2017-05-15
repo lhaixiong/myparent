@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/myparent.iml" filepath="$PROJECT_DIR$/myparent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myparent-base/myparent-base.iml" filepath="$PROJECT_DIR$/myparent-base/myparent-base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myparent-base2/myparent-base2.iml" filepath="$PROJECT_DIR$/myparent-base2/myparent-base2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myparent-s2/myparent-s2.iml" filepath="$PROJECT_DIR$/myparent-s2/myparent-s2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myparent-s3/myparent-s3.iml" filepath="$PROJECT_DIR$/myparent-s3/myparent-s3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myparent-sh/myparent-sh.iml" filepath="$PROJECT_DIR$/myparent-sh/myparent-sh.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myparetn-h1/myparetn-h1.iml" filepath="$PROJECT_DIR$/myparetn-h1/myparetn-h1.iml" />
+    </modules>
+  </component>
+</project>

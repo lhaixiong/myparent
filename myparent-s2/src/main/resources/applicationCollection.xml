@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.1.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean id="person5" class="com.collections.Person">
+        <property name="name" value="util"/>
+        <property name="age" value="20"/>
+        <property name="cars" ref="cars"/>
+    </bean>
+
+    <util:list id="cars">
+        <ref bean="car"></ref>
+        <ref bean="car2"></ref>
+    </util:list>
+
+    <bean id="dataSource" class="com.collections.DataSource">
+        <property name="properties">
+            <props>
+                <prop key="driver">oracle.jdbc.OracleDriver</prop>
+                <prop key="url">jdbc:oracle:thin:@//localhost:1521/lhxtest</prop>
+                <prop key="username">lhxtest</prop>
+                <prop key="password">lhxtest</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="newPerson" class="com.collections.NewPerson">
+        <property name="name" value="newPerson"/>
+        <property name="age" value="20"/>
+        <property name="cars" >
+            <map>
+                <entry key="aa" value-ref="car"/>
+                <entry key="bb" value-ref="car2"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="person3" class="com.collections.Person">
+        <property name="name" value="list"/>
+        <property name="age" value="20"/>
+        <property name="cars" >
+            <list>
+                <ref bean="car"/>
+                <ref bean="car2"/>
+                <bean class="com.collections.Car">
+                    <property name="brand" value="Ford"/>
+                    <property name="corp" value="changan"/>
+                    <property name="maxSpeed" value="400"/>
+                    <property name="price" value="200000"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+
+
+
+    <bean id="car2" class="com.collections.Car">
+        <constructor-arg value="audi" name="brand"/>
+        <constructor-arg  name="corp">
+            <value><![CDATA[<SHANHHAI>]]></value>
+        </constructor-arg>
+        <constructor-arg value="300000" name="price"/>
+    </bean>
+        <bean id="car" class="com.collections.Car">
+            <constructor-arg value="audi"/>
+            <constructor-arg value="shanghai"/>
+            <constructor-arg value="300000"/>
+            <constructor-arg value="400"/>
+        </bean>
+
+        <bean id="helloWorld" class="com.collections.HelloWorld">
+            <property name="name" value="helloWorld,lhx"/>
+            <property name="age" value="100"/>
+        </bean>
+
+
+ </beans>

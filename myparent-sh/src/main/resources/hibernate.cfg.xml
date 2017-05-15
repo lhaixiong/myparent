@@ -1,0 +1,24 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+
+        <property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+        <!--<property name="hbm2ddl.auto">update</property>-->
+
+        <!--启用二级缓存-->
+        <!--<property name="cache.use_second_level_cache">true</property>-->
+        <!--二级缓存产品-->
+        <!--<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>-->
+
+        <!--管理session,与当前线程绑定-->
+        <!--<property name="current_session_context_class">thread</property>-->
+
+        <!--缓存对象-->
+        <!--<class-cache class="com.entity.News" usage="read-write"/>-->
+    </session-factory>
+</hibernate-configuration>

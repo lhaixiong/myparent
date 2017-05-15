@@ -1,0 +1,77 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.url">jdbc:oracle:thin:@//localhost:1521/lhxtest</property>
+        <property name="connection.driver_class">oracle.jdbc.OracleDriver</property>
+        <property name="connection.username">lhxtest</property>
+        <property name="connection.password">lhxtest</property>
+        <!--<property name="connection.isolation">1/2/3/4/4/5/5/6</property>-->
+
+        <property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+        <property name="hbm2ddl.auto">update</property>
+
+        <!--C3P0配置 -->
+        <!--<property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>-->
+        <!--<property name="hibernate.c3p0.max_size">20</property>-->
+        <!--<property name="hibernate.c3p0.min_size">5</property>-->
+        <!--<property name="hibernate.c3p0.timeout">120</property>-->
+        <!--<property name="automaticTestTable">Test</property>-->
+        <!--<property name="hibernate.c3p0.max_statements">100</property>-->
+        <!--<property name="hibernate.c3p0.idle_test_period">120</property>-->
+        <!--<property name="hibernate.c3p0.acquire_increment">1</property>-->
+        <!--<property name="c3p0.testConnectionOnCheckout">true</property>-->
+        <!--<property name="c3p0.idleConnectionTestPeriod">18000</property>-->
+        <!--<property name="c3p0.maxIdleTime">25000</property>-->
+        <!--<property name="c3p0.idle_test_period">120</property>-->
+
+        <!--<property name="hibernate.connection.provider_class">org.hibernate.c3p0.internal.C3P0ConnectionProvider</property>-->
+        <property name="hibernate.c3p0.max_size">10</property>
+        <property name="hibernate.c3p0.min_size">5</property>
+        <property name="c3p0.acquire_increment">2</property>
+        <property name="c3p0.idle_test_period">2000</property>
+        <property name="c3p0.timeout">2000</property>
+        <property name="c3p0.max_statements">10</property>
+
+        <!--启用二级缓存-->
+        <property name="cache.use_second_level_cache">true</property>
+        <!--二级缓存产品-->
+        <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+
+        <!--管理session,与当前线程绑定-->
+        <!--<property name="current_session_context_class">thread</property>-->
+
+        <mapping class="com.n2n.Category"/>
+        <mapping class="com.n2n.Item"/>
+        <mapping class="com.one2one.Department"/>
+        <mapping class="com.one2one.Manager"/>
+        <mapping class="com.n21.Customer"/>
+        <mapping class="com.n21.Order"/>
+        <mapping class="com.entity.News"/>
+        <!--<mapping class="com.lhx.entity.EmployeesEntity"/>-->
+        <!--<mapping resource="com/lhx/entity/EmployeesEntity.hbm.xml"/>-->
+        <!--<mapping resource="com/lhx/entity/CountriesEntity.hbm.xml"/>-->
+        <!--<mapping class="com.lhx.entity.CountriesEntity"/>-->
+        <!--<mapping resource="com/lhx/entity/DepartmentsEntity.hbm.xml"/>-->
+        <!--<mapping class="com.lhx.entity.DepartmentsEntity"/>-->
+        <!--<mapping resource="com/lhx/entity/EmpDetailsViewEntity.hbm.xml"/>-->
+        <!--<mapping class="com.lhx.entity.EmpDetailsViewEntity"/>-->
+        <!--<mapping resource="com/lhx/entity/JobsEntity.hbm.xml"/>-->
+        <!--<mapping class="com.lhx.entity.JobsEntity"/>-->
+        <!--<mapping resource="com/lhx/entity/JobGradesEntity.hbm.xml"/>-->
+        <!--<mapping class="com.lhx.entity.JobGradesEntity"/>-->
+        <!--<mapping resource="com/lhx/entity/JobHistoryEntity.hbm.xml"/>-->
+        <!--<mapping class="com.lhx.entity.JobHistoryEntity"/>-->
+        <!--<mapping resource="com/lhx/entity/LocationsEntity.hbm.xml"/>-->
+        <!--<mapping class="com.lhx.entity.LocationsEntity"/>-->
+        <!--<mapping class="com.lhx.entity.RegionsEntity"/>-->
+        <!--<mapping resource="com/lhx/entity/RegionsEntity.hbm.xml"/>-->
+
+        <!--缓存对象-->
+        <!--<class-cache class="com.entity.News" usage="read-write"/>-->
+    </session-factory>
+</hibernate-configuration>

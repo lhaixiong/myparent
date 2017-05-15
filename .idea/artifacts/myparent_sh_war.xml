@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="myparent-sh:war">
+    <output-path>$PROJECT_DIR$/myparent-sh/target</output-path>
+    <root id="archive" name="myparent-sh.war">
+      <element id="artifact" artifact-name="myparent-sh:war exploded" />
+    </root>
+  </artifact>
+</component>

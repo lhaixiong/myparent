@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.1.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+    <context:component-scan base-package="com.lhxa"/>
+    <context:property-placeholder location="classpath:db.properties"/>
+
+    <!-- 配置数据源 -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${jdbc.driverClass}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+
+        <property name="initialPoolSize" value="${jdbc.c3p0.initialPoolSize}"/>
+        <property name="minPoolSize" value="${jdbc.c3p0.minPoolSize}"/>
+        <property name="maxPoolSize" value="${jdbc.c3p0.maxPoolSize}"/>
+        <property name="maxIdleTime" value="${jdbc.c3p0.maxIdleTime}"/>
+        <property name="acquireIncrement" value="${jdbc.c3p0.acquireIncrement}"/>
+
+        <property name="testConnectionOnCheckout" value="${jdbc.c3p0.testConnectionOnCheckout}"/>
+        <property name="testConnectionOnCheckin" value="${jdbc.c3p0.testConnectionOnCheckin}"/>
+        <property name="idleConnectionTestPeriod" value="${jdbc.c3p0.idleConnectionTestPeriod}"/>
+    </bean>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+        <property name="packagesToScan">
+            <list>
+                <value>com.lhxa.entity</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 配置事务异常封装 -->
+    <!--<bean id="persistenceExceptionTranslationPostProcessor" class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />-->
+
+    <!--配置事务管理器-->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <!-- 基于数据源的事务管理器 -->
+    <!-- <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+        p:dataSource-ref="dataSource" /> -->
+
+    <tx:advice id="txadvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED"/>
+            <tx:method name="get*" read-only="true"/>
+            <tx:method name="find*" read-only="true"/>
+            <tx:method name="purchase" propagation="REQUIRES_NEW"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="pointcut"
+                      expression="(execution(* com.lhxa.service.comm.imp.*Imp.*(..))) or execution(* com.lhxa.dao.*.imp.*Imp.*(..))"/>
+        <aop:advisor advice-ref="txadvice" pointcut-ref="pointcut"/>
+    </aop:config>
+
+</beans>

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="myparent-s3:war">
+    <output-path>$PROJECT_DIR$/myparent-s3/target</output-path>
+    <root id="archive" name="myparent-s3.war">
+      <element id="artifact" artifact-name="myparent-s3:war exploded" />
+    </root>
+  </artifact>
+</component>
