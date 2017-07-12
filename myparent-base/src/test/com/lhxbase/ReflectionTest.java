@@ -61,7 +61,7 @@ public class ReflectionTest {
         Method method=clazz.getDeclaredMethod("setAge",Integer.class);
         Object object=clazz.newInstance();
 
-        int age=44;
+        int age=888;
 
         Annotation annotation=method.getAnnotation(AgeValidator.class);
         if(annotation!=null){

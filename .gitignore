@@ -1,0 +1,12 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea
+target/
+myparent-base/target/
+myparent-base2/target/
+myparent-s2/target/
+myparent-s3/target/
+myparent-sh/target/
+myparetn-h1/target/
+.gitignore
+
+
