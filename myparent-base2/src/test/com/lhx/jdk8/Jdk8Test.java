@@ -84,18 +84,216 @@ import java.util.stream.Stream;
  *
  * 2. 中间操作
  *
+ *  2.1筛选与切片:
+  filter(Predicatep)
+  接收Lambda ，从流中排除某些元素。
+  distinct()
+  筛选，通过流所生成元素的hashCode() 和equals() 去除重复元素
+  limit(long maxSize)
+  截断流，使其元素不超过给定数量。
+  skip(long n)
+  跳过元素，返回一个扔掉了前n 个元素的流。若流中元素不足n 个，则返回一个空流。与limit(n) 互补
+
+   2.2 映射
+ map(Functionf)
+ 接收一个函数作为参数，该函数会被应用到每个元素上，并将其映射成一个新的元素。
+ mapToDouble(ToDoubleFunction f)
+ 接收一个函数作为参数，该函数会被应用到每个元素上，产生一个新的DoubleStream。
+ mapToInt(ToIntFunction f)
+ 接收一个函数作为参数，该函数会被应用到每个元素上，产生一个新的IntStream。
+ mapToLong(ToLongFunction f)
+ 接收一个函数作为参数，该函数会被应用到每个元素上，产生一个新的LongStream。
+ flatMap(Function f)
+ 接收一个函数作为参数，将流中的每个值都换成另一个流，然后把所有流连接成一个流
+
+ 2.3排序
+ sorted()
+ 产生一个新流，其中按自然顺序排序
+ sorted(Comparatorcomp)
+ 产生一个新流，其中按比较器顺序排序
+ *
  * 3. 终止操作(终端操作)
+ *终端操作会从流的流水线生成结果。其结果可以是任何不是流的值，例如：List、Integer，甚至是void
+ *
+ * 3.1查找与匹配
+ * allMatch(Predicate p)
+ 检查是否匹配所有元素
+ anyMatch(Predicate p)
+ 检查是否至少匹配一个元素
+ noneMatch(Predicatep)
+ 检查是否没有匹配所有元素
+ findFirst()
+ 返回第一个元素
+ 终端操作会从流的流水线生成结果。其结果可以是任何不是流的值，例如：List、Integer，甚至是void 。
+ findAny()
+ 返回当前流中的任意元素
+ count()
+ 返回流中元素总数
+ max(Comparatorc)
+ 返回流中最大值
+ min(Comparatorc)
+ 返回流中最小值
+ reduce(T iden, BinaryOperator b)
+ 可以将流中元素反复结合起来，得到一个值。
+ forEach(Consumerc)
+ 内部迭代(使用Collection 接口需要用户去做迭代，称为外部迭代。相反，Stream API 使用内部迭代——它帮你把迭代做了)
+
+ 3.2归约
+ reduce(BinaryOperator b)
+ 可以将流中元素反复结合起来，得到一个值。
+ 返回Optional<T>
+ 备注：map 和reduce 的连接通常称为map-reduce 模式，因Google 用它来进行网络搜索而出名。
  */
 public class Jdk8Test {
     List<Employee> employeeList= Arrays.asList(
-            new Employee("aa",23,2999.99),
-            new Employee("dd",53,5999.99),
-            new Employee("bb",33,3999.99),
-            new Employee("cc",43,4999.99),
-            new Employee("ee",63,6999.99)
+            new Employee("aa",23,2999.99, Employee.Status.BUSY),
+            new Employee("dd",53,5999.99, Employee.Status.FREE),
+            new Employee("bb",33,3999.99, Employee.Status.FREE),
+            new Employee("cc",43,4999.99, Employee.Status.BUSY),
+            new Employee("ee",63,6999.99, Employee.Status.BUSY),
+            new Employee("ee", 63, 6999.99, Employee.Status.VOCATION),
+            new Employee("ee",63,6999.99, Employee.Status.BUSY)
     );
     @Test
-    public void testStream(){
+    public void testMatch(){
+        System.out.println("----------allMatch-------");
+        boolean b = employeeList.stream()
+                .allMatch((e) -> e.getStatus().equals(Employee.Status.BUSY));
+        System.out.println(b);
+
+        System.out.println("-----anyMatch----");
+        System.out.println(employeeList.stream()
+                .anyMatch((e) -> e.getStatus().equals(Employee.Status.FREE)));
+
+        System.out.println("-----noneMatch----");
+        boolean b3 = employeeList.stream()
+                .noneMatch((e) -> e.getStatus().equals(Employee.Status.VOCATION));
+        System.out.println(b3);
+
+        System.out.println("-----findFirst----");
+        Optional<Employee> opt = employeeList.stream()
+                .sorted((e1, e2) -> -Double.compare(e1.getSalory(), e2.getSalory()))
+                .findFirst();
+        opt.orElse(new Employee());
+        System.out.println(opt.get());
+
+        System.out.println("-----findAny----");
+        Optional<Employee> opt2 = employeeList.stream()
+                .filter((e)->e.getStatus().equals(Employee.Status.FREE))
+                .findAny();
+        opt2.orElse(new Employee());
+        System.out.println(opt2.get());
+
+        System.out.println("-----count----");
+        long count = employeeList.stream().count();
+        System.out.println(count);
+
+        System.out.println("-----Max obj----");
+        Optional<Employee> max = employeeList.stream()
+                .max((e1, e2) -> -Double.compare(e1.getSalory(), e2.getSalory()));
+        System.out.println(max.get());
+
+        System.out.println("-----min field----");
+        Optional<Double> min = employeeList.stream()
+                .map((e) -> e.getSalory())
+                .min(Double::compare);
+        System.out.println(min.get());
+    }
+    @Test
+    public void testSort(){
+        List<String> list = Arrays.asList("ccc", "bbb", "ggg", "aaa", "eee");
+        list.stream()
+                .sorted()
+                .forEach(System.out::println);
+        System.out.println("-----------");
+        employeeList.stream()
+                .sorted((e1,e2)->{
+                    int age=e1.getAge()-e2.getAge();
+                    if(age==0){
+                        return e1.getName().compareTo(e2.getName());
+                    }else {
+                        return age;
+                    }
+                }).forEach(System.out::println);
+    }
+    @Test
+    public void testAdd(){
+        List<String> list = Arrays.asList("aaa", "bbb", "ccc", "ddd", "eee");
+        List list1=new ArrayList<>();
+        list1.add(11);
+        list1.add(22);
+        list1.add(list);
+        System.out.println("add....."+list1);//add.....[11, 22, [aaa, bbb, ccc, ddd, eee]]
+
+        list1.clear();
+        list1.add(11);
+        list1.add(22);
+        list1.addAll(list);
+        System.out.println("addAll....."+list1);//addAll.....[11, 22, aaa, bbb, ccc, ddd, eee]
+    }
+    @Test
+    public void testMap(){
+        List<String> list = Arrays.asList("aaa", "bbb", "ccc", "ddd", "eee");
+        list.stream()
+                .map((s)->s.toUpperCase())
+                .forEach((e)-> System.out.println(e));
+        System.out.println("-----------");
+        employeeList.stream()
+                .map((e)->e.getSalory())
+                .forEach(System.out::println);
+
+        System.out.println("-------------");
+//        flatMap(Function f)
+//        接收一个函数作为参数，将流中的每个值都换成另一个流，然后把所有流连接成一个流
+        Stream<Stream<Character>> ss = list.stream()
+                .map(Jdk8Test::filterCharacter);//{'a','a','a'},{'b','b','b'}
+        ss.forEach((s)->{
+            s.forEach(System.out::println);
+        });
+        System.out.println("-----flatMap--------");
+        Stream<Character> s = list.stream()
+                .flatMap(Jdk8Test::filterCharacter);//{'a','a','a','b','b','b'}
+        s.forEach(System.out::println);
+    }
+    public static Stream<Character> filterCharacter(String str){
+        List<Character> list=new ArrayList<>();
+        char[] chars = str.toCharArray();
+        for (char c : chars) {
+            list.add(c);
+        }
+        return list.stream();
+    }
+    @Test
+    public void testDistinct(){
+        Collections.sort(employeeList, (e1, e2) ->e1.getAge()-e2.getAge());
+        employeeList.stream().forEach(System.out::println);
+        System.out.println("------------");
+        employeeList.stream()
+                .filter((e)->e.getSalory()>3000)
+//                .limit(3)
+//                .skip(1)
+                .distinct()
+                .forEach(System.out::println);
+    }
+    @Test
+    public void testLimit(){
+        Collections.sort(employeeList,(e1,e2)->e1.getAge()-e2.getAge());
+        employeeList.stream().forEach(System.out::println);
+        System.out.println("------------");
+        employeeList.stream()
+                .filter((e)->e.getSalory()>3000)
+                .limit(3)
+                .skip(1)
+                .forEach(System.out::println);
+    }
+    @Test
+    public void testFilter(){
+        Stream<Employee> stream = employeeList.stream()
+                .filter((e) -> e.getAge() > 40);
+        stream.forEach(System.out::println);
+    }
+    @Test
+    public void testStreamCreate(){
         //1. Collection 提供了两个方法  stream() 与 parallelStream()
         List<String> list = new ArrayList<>();
         Stream<String> stream = list.stream(); //获取一个顺序流
