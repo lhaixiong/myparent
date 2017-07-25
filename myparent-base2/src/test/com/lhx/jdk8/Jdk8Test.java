@@ -3,8 +3,12 @@ package com.lhx.jdk8;
 import com.lhx.jdk8.sundry.*;
 import org.junit.Test;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 /**
@@ -143,7 +147,173 @@ import java.util.stream.Stream;
  可以将流中元素反复结合起来，得到一个值。
  返回Optional<T>
  备注：map 和reduce 的连接通常称为map-reduce 模式，因Google 用它来进行网络搜索而出名。
+
+ 3.3收集
+ collect(Collector c)
+ 将流转换为其他形式。接收一个Collector接口的实现，用于给Stream中元素做汇总的方法
+ Collector 接口中方法的实现决定了如何对流执行收集操作(如收集到List、Set、Map)。
+ 但是Collectors 实用类提供了很多静态方法，可以方便地创建常见收集器实例，具体方法与实例如下表：
+
+ toList
+ List<T>
+ 把流中元素收集到List
+ List<Employee>emps=list.stream().collect(Collectors.toList());
+ toSet
+ Set<T>
+ 把流中元素收集到Set
+ Set<Employee>emps=list.stream().collect(Collectors.toSet());
+ toCollection
+ Collection<T>
+ 把流中元素收集到创建的集合
+ Collection<Employee>emps=list.stream().collect(Collectors.toCollection(ArrayList::new));
+ counting
+ Long
+ 计算流中元素的个数
+ longcount=list.stream().collect(Collectors.counting());
+ summingInt
+ Integer
+ 对流中元素的整数属性求和
+ inttotal=list.stream().collect(Collectors.summingInt(Employee::getSalary));
+ averagingInt
+ Double
+ 计算流中元素Integer属性的平均值
+ doubleavg=list.stream().collect(Collectors.averagingInt(Employee::getSalary));
+ summarizingInt
+ IntSummaryStatistics
+ 收集流中Integer属性的统计值。如：平均值
+ IntSummaryStatisticsiss=list.stream().collect(Collectors.summarizingInt(Employee::getSalary));
+ joining
+ String
+ 连接流中每个字符串
+ Stringstr=list.stream().map(Employee::getName).collect(Collectors.joining());
+ maxBy
+ Optional<T>
+ 根据比较器选择最大值
+ Optional<Emp>max=list.stream().collect(Collectors.maxBy(comparingInt(Employee::getSalary)));
+ minBy
+ Optional<T>
+ 根据比较器选择最小值
+ Optional<Emp>min=list.stream().collect(Collectors.minBy(comparingInt(Employee::getSalary)));
+ reducing
+ 归约产生的类型
+ 从一个作为累加器的初始值开始，利用BinaryOperator与流中元素逐个结合，从而归约成单个值
+ inttotal=list.stream().collect(Collectors.reducing(0,Employee::getSalar,Integer::sum));
+ collectingAndThen
+ 转换函数返回的类型
+ 包裹另一个收集器，对其结果转换函数
+ inthow=list.stream().collect(Collectors.collectingAndThen(Collectors.toList(),List::size));
+ groupingBy
+ Map<K,List<T>>
+ 根据某属性值对流分组，属性为K，结果为V
+ Map<Emp.Status, List<Emp>> map= list.stream()
+ .collect(Collectors.groupingBy(Employee::getStatus));
+ partitioningBy
+ Map<Boolean,List<T>>
+ 根据true或false进行分区
+ Map<Boolean,List<Emp>>vd=list.stream().collect(Collectors.partitioningBy(Employee::getManage));
+
+
+ 三、并行流与串行流
+ 并行流就是把一个内容分成多个数据块，并用不同的线程分别处理每个数据块的流。
+ Java 8 中将并行进行了优化，我们可以很容易的对数据进行并行操作。Stream API 可以声明性地通过parallel() 与sequential() 在并行流与顺序流之间进行切换。
+
+四： Optional 类
+ Optional<T> 类(java.util.Optional) 是一个容器类，代表一个值存在或不存在，原来用null 表示一个值不存在，现在Optional 可以更好的表达这个概念。并且可以避免空指针异常。
+ 常用方法：
+ Optional.of(T t) : 创建一个Optional 实例
+ Optional.empty() : 创建一个空的Optional 实例
+ Optional.ofNullable(T t):若t 不为null,创建Optional 实例,否则创建空实例
+ isPresent() : 判断是否包含值
+ orElse(T t) : 如果调用对象包含值，返回该值，否则返回t
+ orElseGet(Supplier s) :如果调用对象包含值，返回该值，否则返回s 获取的值
+ map(Function f): 如果有值对其处理，并返回处理后的Optional，否则返回Optional.empty()
+ flatMap(Function mapper):与map 类似，要求返回值必须是Optional
+
+ 五：接口中的默认方法与静态方法
+ 5.1接口中的默认方法
+ Java 8中允许接口中包含具有具体实现的方法，该方法称为“默认方法”，默认方法使用default关键字修饰。
+ 例如：
+ public interface MyInterface {//接口中的默认方法
+
+ default String getName(){
+ return "呵呵呵";
+ }
+
+ public static void show(){//接口中的静态方法
+ System.out.println("接口中的静态方法");
+ }
+
+ }
+
+ 5.2接口默认方法的”类优先”原则
+ 若一个接口中定义了一个默认方法，而另外一个父类或接口中又定义了一个同名的方法时
+ 选择父类中的方法。如果一个父类提供了具体的实现，那么接口中具有相同名称和参数的默认方法会被忽略。
+ 接口冲突。如果一个父接口提供一个默认方法，而另一个接口也提供了一个具有相同名称和参数列表的方法（不管方法是否是默认方法），那么必须覆盖该方法来解决冲突
+ public class SubClass extends MyClass implements MyFun, MyInterface{
+
+@Override
+public String getName() {
+return MyInterface.super.getName();
+}
+
+ 六:日期新API
+6.1 Instant 时间戳
+用于“时间戳”的运算。它是以Unix元年(传统的设定为UTC时区1970年1月1日午夜时分)开始所经历的描述进行运算
+
+6.2 Duration 和Period
+Duration:用于计算两个“时间”间隔
+Period:用于计算两个“日期”间隔
+
+6.3 日期的操纵
+TemporalAdjuster : 时间校正器。有时我们可能需要获取例如：将日期调整到“下个周日”等操作。
+TemporalAdjusters : 该类通过静态方法提供了大量的常用TemporalAdjuster 的实现。
+例如获取下个周日：
+
+ 6.4 解析与格式化
+java.time.format.DateTimeFormatter 类：该类提供了三种格式化方法：
+预定义的标准格式
+语言环境相关的格式
+自定义的格式
+
+ 6.5时区的处理
+Java8 中加入了对时区的支持，带时区的时间为分别为：
+ZonedDate、ZonedTime、ZonedDateTime
+其中每个时区都对应着ID，地区ID都为“{区域}/{城市}”的格式
+例如：Asia/Shanghai 等
+ZoneId：该类中包含了所有的时区信息
+getAvailableZoneIds() : 可以获取所有时区时区信息
+of(id) : 用指定的时区信息获取ZoneId 对象
+
+ 6.6与传统日期处理的转换
+java.time.Instant  java.util.Date
+Date.from(instant)
+date.toInstant()
+java.time.Instant  java.sql.Timestamp
+Timestamp.from(instant)
+timestamp.toInstant()
+java.time.ZonedDateTime  java.util.GregorianCalendar
+GregorianCalendar.from(zonedDateTime)
+cal.toZonedDateTime()
+java.time.LocalDate  java.sql.Time
+Date.valueOf(localDate)
+date.toLocalDate()
+java.time.LocalTime  java.sql.Time
+Date.valueOf(localDate)
+date.toLocalTime()
+java.time.LocalDateTime  java.sql.Timestamp
+Timestamp.valueOf(localDateTime)
+timestamp.toLocalDateTime()
+java.time.ZoneId  java.util.TimeZone
+Timezone.getTimeZone(id)
+timeZone.toZoneId()
+java.time.format.DateTimeFormatter  java.text.DateFormat
+formatter.toFormat()
+
+七：重复注解与类型注解
+Java 8对注解处理提供了两点改进：可重复的注解及可用于类型的注解。
  */
+
+
 public class Jdk8Test {
     List<Employee> employeeList= Arrays.asList(
             new Employee("aa",23,2999.99, Employee.Status.BUSY),
@@ -151,9 +321,178 @@ public class Jdk8Test {
             new Employee("bb",33,3999.99, Employee.Status.FREE),
             new Employee("cc",43,4999.99, Employee.Status.BUSY),
             new Employee("ee",63,6999.99, Employee.Status.BUSY),
-            new Employee("ee", 63, 6999.99, Employee.Status.VOCATION),
+            new Employee("ee",63, 6999.99, Employee.Status.VOCATION),
             new Employee("ee",63,6999.99, Employee.Status.BUSY)
     );
+    @Test
+    public void testOptional(){
+//        Optional<Employee> op = Optional.of(new Employee("张三", 18, 9999.99d));
+//
+//        Optional<String> op2 = op.map(Employee::getName);
+//        System.out.println(op2.get());
+//
+//        Optional<String> op3 = op.flatMap((e) -> Optional.of(e.getName()));
+//        System.out.println(op3.get());
+        ///////////////
+//        Optional<Employee> op = Optional.ofNullable(null);
+//
+//        if(op.isPresent()){
+//            System.out.println(op.get());
+//        }
+//
+//        Employee emp = op.orElse(new Employee("张三11", 18, 9999.99d));
+//        System.out.println(emp);
+//
+//        Employee emp2 = op.orElseGet(() -> new Employee("张三133", 18, 9999.99d));
+//        System.out.println(emp2);
+        ///////////////
+//        Optional<Employee> op = Optional.ofNullable(null);
+//		System.out.println(op.get());
+
+//		Optional<Employee> op2 = Optional.empty();
+//		System.out.println(op2.get());
+        ///////////////
+//        Optional<Employee> op = Optional.of(new Employee());
+//        Employee emp = op.get();
+//        System.out.println(emp);
+        ///////////////
+//        Man man = new Man();
+//        String name = getGodnessName(man);
+//        System.out.println(name);
+        ///////////////
+        //运用 Optional 的实体类
+//        Optional<Godness> godness = Optional.ofNullable(new Godness("林志玲"));
+//        Optional<NewMan> op = Optional.ofNullable(new NewMan(godness));
+        Optional<NewMan> op = Optional.ofNullable(null);
+        String name = getGodnessName2(op);
+        System.out.println(name);
+        ///////////////
+        ///////////////
+    }
+    public String getGodnessName2(Optional<NewMan> man){
+        return man.orElse(new NewMan())
+                .getGodness()
+                .orElse(new Godness("苍老师"))
+                .getName();
+    }
+    //需求：获取一个男人心中女神的名字
+    public String getGodnessName(Man man){
+        if(man != null){
+            Godness g = man.getGod();
+
+            if(g != null){
+                return g.getName();
+            }
+        }
+
+        return "苍老师";
+    }
+
+    @Test
+    public void testParallel(){
+//        Instant start = Instant.now();
+//        long sum = LongStream.rangeClosed(0, 1000000000L)
+////                .parallel()//没有为串行流
+//                .reduce(0,Long::sum);
+//        Instant end = Instant.now();
+//        System.out.println("sum："+ sum);
+//        System.out.println("耗时："+ Duration.between(start,end).toMillis());//1903
+
+        Instant start = Instant.now();
+        long sum = LongStream.range(0, 1000000000L)
+                .parallel()//并行流
+                .reduce(0,Long::sum);
+        Instant end = Instant.now();
+        System.out.println("sum："+ sum);
+        System.out.println("耗时："+ Duration.between(start,end).toMillis());//450
+    }
+    @Test
+    public void testCollector(){
+        List<String> list = employeeList.stream()
+                .map(Employee::getName)
+                .collect(Collectors.toList());
+        list.forEach(System.out::println);
+
+        System.out.println("------set--------");
+        Set<String> set = employeeList.stream()
+                .map(Employee::getName)
+                .collect(Collectors.toSet());
+        set.forEach(System.out::println);
+
+        System.out.println("------hashset--------");
+        set = employeeList.stream()
+                .map(Employee::getName)
+                .collect(Collectors.toCollection(HashSet::new));
+        set.forEach(System.out::println);
+
+
+        System.out.println("-------count------");
+        Long count = employeeList.stream()
+                .collect(Collectors.counting());
+        System.out.println("count:"+count);
+
+        System.out.println("---------avg-----");
+        Double avg = employeeList.stream()
+                .collect(Collectors.averagingDouble(Employee::getSalory));
+        System.out.println("avg:"+avg);
+
+        System.out.println("--------sum DoubleSummaryStatistics-----");
+        DoubleSummaryStatistics sum = employeeList.stream()
+                .collect(Collectors.summarizingDouble(Employee::getSalory));
+        System.out.println("sum:"+sum);
+
+        System.out.println("----------max-----");
+        Optional<Employee> max = employeeList.stream()
+                .collect(Collectors.maxBy((e1, e2) -> Double.compare(e1.getSalory(), e2.getSalory())));
+        System.out.println("max:"+max);
+
+        System.out.println("------min------");
+        Optional<Employee> min = employeeList.stream()
+                .collect(Collectors.minBy((e1, e2) -> Double.compare(e1.getSalory(), e2.getSalory())));
+        System.out.println("min:"+min);
+
+        System.out.println("------group-----");
+        Map<Employee.Status, List<Employee>> group = employeeList.stream()
+                .collect(Collectors.groupingBy(Employee::getStatus));
+        System.out.println("group:"+group);
+
+        System.out.println("-----multiGroup-----");
+        Map<Employee.Status, Map<String, List<Employee>>> multiGroup = employeeList.stream()
+                .collect(Collectors.groupingBy(Employee::getStatus, Collectors.groupingBy((e) -> {
+                    if (e.getAge() <= 35) {
+                        return "青年";
+                    } else if (e.getAge() <= 50) {
+                        return "中年";
+                    } else {
+                        return "老年";
+                    }
+                })));
+        System.out.println("multiGroup:"+multiGroup);
+
+        System.out.println("-----partition-----");
+        Map<Boolean, List<Employee>> partition = employeeList.stream()
+                .collect(Collectors.partitioningBy(e -> e.getSalory() > 5000d));
+        System.out.println("partition:"+partition);
+
+        System.out.println("------join------");
+        String names = employeeList.stream()
+                .map(Employee::getName)
+                .collect(Collectors.joining("|"));
+        System.out.println("join:"+names);
+    }
+    @Test
+    public void testReduce(){
+        List<Integer> list=Arrays.asList(1,2,3,4,5);
+        Integer sum = list.stream()
+                .reduce(0, (x, y) -> x + y);
+        System.out.println("sum:"+sum);
+        System.out.println("-----map-reduce----");
+        Optional<Double> salory = employeeList.stream()
+                .map(x -> x.getSalory())
+                .reduce(Double::sum);
+        System.out.println("salory:"+salory.get());
+
+    }
     @Test
     public void testMatch(){
         System.out.println("----------allMatch-------");
@@ -482,5 +821,83 @@ public class Jdk8Test {
         //lamda表达式
         Comparator<Integer> comparator2=(x,y)->Integer.compare(x,y);
         TreeSet<Integer> set2=new TreeSet<>(comparator);
+    }
+    //注意：Optional 不能被序列化
+    public static class NewMan {
+
+        private Optional<Godness> godness = Optional.empty();
+
+        private Godness god;
+
+        public Optional<Godness> getGod(){
+            return Optional.of(god);
+        }
+
+        public NewMan() {
+        }
+
+        public NewMan(Optional<Godness> godness) {
+            this.godness = godness;
+        }
+
+        public Optional<Godness> getGodness() {
+            return godness;
+        }
+
+        public void setGodness(Optional<Godness> godness) {
+            this.godness = godness;
+        }
+
+        @Override
+        public String toString() {
+            return "NewMan [godness=" + godness + "]";
+        }
+
+    }
+    public static class Godness{
+        private String name;
+
+        public Godness() {
+        }
+
+        public Godness(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return "Godness [name=" + name + "]";
+        }
+    }
+    public static class Man{
+        private Godness god;
+
+        public Man() {
+        }
+
+        public Man(Godness god) {
+            this.god = god;
+        }
+
+        public Godness getGod() {
+            return god;
+        }
+
+        public void setGod(Godness god) {
+            this.god = god;
+        }
+
+        @Override
+        public String toString() {
+            return "Man [god=" + god + "]";
+        }
     }
 }

@@ -40,8 +40,11 @@ public class TestThreadPool {
             });
             list.add(future);
         }
-        // 关闭线程池
+        // 关闭线程池 不允许线程池继续提交任务
         pool.shutdown();
+        //线程池中是否所有线程任务完成
+        while (!pool.isTerminated()){
+        }
         System.out.println(list);
 
 //        ThreadDemo demo=new ThreadDemo();
