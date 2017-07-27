@@ -8,7 +8,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>myparent-base2</artifactId>
     <packaging>war</packaging>
-    <name>myparent-base2 Maven Webapp</name>
+    <name>myparent-base2</name>
     <url>http://maven.apache.org</url>
     <properties>
         <junit.version>4.11</junit.version>

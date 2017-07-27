@@ -5,15 +5,20 @@ import org.junit.Test;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
+import java.nio.channels.*;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Scanner;
 import java.util.SortedMap;
 
 /**
@@ -85,7 +90,244 @@ import java.util.SortedMap;
  * 解码：字节数组  -> 字符串
  *
  */
+
+/**
+ * 一、使用 NIO 完成网络通信的三个核心：
+ *
+ * 1. 通道（Channel）：负责连接
+ *
+ * 	   java.nio.channels.Channel 接口：
+ * 			|--SelectableChannel
+ * 				|--SocketChannel
+ * 				|--ServerSocketChannel
+ * 				|--DatagramChannel(收发udp协议包)
+ *
+ * 				|--Pipe.SinkChannel
+ * 				|--Pipe.SourceChannel
+ *
+ * 2. 缓冲区（Buffer）：负责数据的存取
+ *
+ * 3. 选择器（Selector）：是 SelectableChannel 的多路复用器。用于监控 SelectableChannel 的 IO 状况
+ *
+ */
+
+/**
+ * 管道(Pipe)
+ * Java NIO 管道是2个线程之间的单向数据连接。Pipe有一个source通道和一个sink通道。
+ * 数据会被写到sink通道，从source通道读取。
+ */
 public class NIOTest {
+    @Test
+    public void testPipe() throws IOException{
+        //1. 获取管道
+        Pipe pipe = Pipe.open();
+
+        //2. 将缓冲区中的数据写入管道
+        ByteBuffer buf = ByteBuffer.allocate(1024);
+
+        //这里可以放入写数据线程代码中
+        Pipe.SinkChannel sinkChannel = pipe.sink();
+        buf.put("通过单向管道发送数据".getBytes());
+        buf.flip();
+        sinkChannel.write(buf);
+
+        //这里可以放入读数据线程代码中
+        //3. 读取缓冲区中的数据
+        Pipe.SourceChannel sourceChannel = pipe.source();
+        buf.flip();
+        int len = sourceChannel.read(buf);
+        System.out.println(new String(buf.array(), 0, len));
+
+        sourceChannel.close();
+        sinkChannel.close();
+    }
+
+
+    @Test
+    public void testDataGramClient() throws IOException{
+        DatagramChannel dc = DatagramChannel.open();
+        dc.configureBlocking(false);
+        ByteBuffer buf = ByteBuffer.allocate(1024);
+        Scanner scan = new Scanner(System.in);
+        while(scan.hasNext()){
+            String str = scan.next();
+            buf.put((new Date().toString() + ":\n" + str).getBytes());
+            buf.flip();
+            dc.send(buf, new InetSocketAddress("127.0.0.1", 9898));
+            buf.clear();
+        }
+        dc.close();
+    }
+
+    @Test
+    public void testDataGramServer() throws IOException{
+        DatagramChannel dc = DatagramChannel.open();
+        dc.configureBlocking(false);
+        dc.bind(new InetSocketAddress(9898));
+        Selector selector = Selector.open();
+        dc.register(selector, SelectionKey.OP_READ);
+        while(selector.select() > 0){
+            Iterator<SelectionKey> it = selector.selectedKeys().iterator();
+            while(it.hasNext()){
+                SelectionKey sk = it.next();
+                if(sk.isReadable()){
+                    ByteBuffer buf = ByteBuffer.allocate(1024);
+                    dc.receive(buf);
+                    buf.flip();
+                    System.out.println(new String(buf.array(), 0, buf.limit()));
+                    buf.clear();
+                }
+            }
+            it.remove();
+        }
+    }
+
+    /*******非阻塞IO开始,重要重要！！！！！！！！**********/
+    public static void main(String[] args){
+        Scanner scanner=new Scanner(System.in);
+        while (scanner.hasNext()){
+            System.out.println(scanner.nextLine());
+        }
+    }
+    //为毛在junit Test方法中System.in不生效在main方法中则可以？在stackoverflow上找不了解答[手动捂脸]
+    @Test
+    public void testScanner(){
+        Scanner scanner=new Scanner(System.in);
+        while (scanner.hasNext()){
+            System.out.println(scanner.nextLine());
+        }
+    }
+    //客户端
+    @Test
+    public void testNonBlockingClient() throws Exception {
+        //1获取通道
+        SocketChannel sChannel = SocketChannel.open(new InetSocketAddress("127.0.0.1", 9898));
+        //2设置非阻塞
+        sChannel.configureBlocking(false);
+        //3发送数据
+        ByteBuffer buf = ByteBuffer.allocate(1024);
+        buf.put(LocalDateTime.now().toString().getBytes());
+        buf.flip();
+        sChannel.write(buf);
+        buf.clear();
+        System.out.println("客户端发送数据完毕");
+
+//        Scanner scan = new Scanner(System.in);
+//
+//        while(scan.hasNext()){
+//            String str = scan.next();
+//            buf.put((LocalDateTime.now().toString() + "\n" + str).getBytes());
+//            buf.flip();
+//            sChannel.write(buf);
+//            buf.clear();
+//        }
+        //5关闭通道
+        sChannel.close();
+    }
+    //服务端
+    @Test
+    public void testNoneBlockingServer() throws Exception {
+        //1. 获取通道
+        ServerSocketChannel ssChannel = ServerSocketChannel.open();
+        //2. 切换非阻塞模式
+        ssChannel.configureBlocking(false);
+        //3. 绑定服务端口
+        ssChannel.bind(new InetSocketAddress(9898));
+        //4. 获取选择器
+        Selector selector = Selector.open();
+        //5. 将通道注册到选择器上, 并且指定“监听接收事件”
+        ssChannel.register(selector, SelectionKey.OP_ACCEPT);
+        //6. 轮询式的获取选择器上已经“准备就绪”的事件
+        while (selector.select()>0){
+            //7. 获取当前选择器中所有注册的“选择键(已就绪的监听事件)”
+            Iterator<SelectionKey> it = selector.selectedKeys().iterator();//这里注意selectedKeys
+            while (it.hasNext()){
+                SelectionKey sk = it.next();
+                //对各个事件的处理
+                if(sk.isAcceptable()){//接收就绪
+                    System.out.println("sk.isAcceptable()");
+                    SocketChannel sChannel= ssChannel.accept();
+                    //切换非阻塞模式,将该通道注册到选择器上
+                    sChannel.configureBlocking(false);
+                    sChannel.register(selector,SelectionKey.OP_READ);
+                }else if(sk.isReadable()){//读就绪
+//                    System.out.println("sk.isReadable()");
+                    SocketChannel sChannel= (SocketChannel) sk.channel();
+                    //读取数据
+                    ByteBuffer buf = ByteBuffer.allocate(1024);
+                    int len=0;
+                    while ((len=sChannel.read(buf))!=-1){
+                        buf.flip();
+                        System.out.println(new String(buf.array(),0,len));
+                        buf.clear();
+                    }
+                }else if(sk.isConnectable()){
+                    System.out.println("sk.isConnectable()");
+                }else if(sk.isWritable()){
+                    System.out.println("sk.isWritable()");
+                }else if(sk.isValid()){
+                    System.out.println("sk.isValid()");
+                }
+                // 取消选择键 SelectionKey
+                it.remove();
+            }
+
+        }
+
+    }
+    /*******非阻塞IO结束**********/
+
+    /*******阻塞IO开始**********/
+    //客户端  阻塞IO
+    @Test
+    public void testBlockingClient() throws Exception {
+        //获取通道、装载数据、传输数据
+        SocketChannel sChannel = SocketChannel.open(new InetSocketAddress("127.0.0.1", 9898));
+        ByteBuffer buf = ByteBuffer.allocate(1024);
+        FileChannel inChannel = FileChannel.open(Paths.get("1.jpg"), StandardOpenOption.READ);
+        while(inChannel.read(buf)!=-1) {
+            buf.flip();
+            sChannel.write(buf);
+            buf.clear();
+        }
+        System.out.println("客户端发送数据完毕,等等服务端返回数据");
+        //告诉服务端发送数据完毕了(可以通过shutdownOutput、close、和切换成非阻塞模式，
+        // 不然服务端一直等待客户端发送数据过去)
+        sChannel.shutdownOutput();
+        int len=0;
+        //接收服务端的返回消息
+        while ((len=sChannel.read(buf))!=-1){
+            buf.flip();
+            System.out.println(new String(buf.array(),0,len));
+            buf.clear();
+        }
+        inChannel.close();
+        sChannel.close();
+    }
+    //服务端  阻塞IO
+    @Test
+    public void testBlockingSever() throws Exception {
+        //获取通道、接收数据、处理数据
+        ServerSocketChannel ssChannel = ServerSocketChannel.open();
+        ssChannel.bind(new InetSocketAddress(9898));
+        SocketChannel sChannel = ssChannel.accept();
+        FileChannel outChannel = FileChannel.open(Paths.get("server.jpg"), StandardOpenOption.READ, StandardOpenOption.WRITE, StandardOpenOption.CREATE);
+        ByteBuffer buf = ByteBuffer.allocate(1024);
+        while (sChannel.read(buf)!=-1){
+            buf.flip();
+            outChannel.write(buf);
+            buf.clear();
+        }
+        System.out.println("服务端处理数据完毕");
+        //返回消息
+        buf.put("服务端处理数据完毕aaaaa".getBytes());
+        buf.flip();
+        sChannel.write(buf);
+        outChannel.close();
+        sChannel.close();
+        ssChannel.close();
+    }
+    /*******阻塞IO结束**********/
     //字符集
     @Test
     public void testCharSet() throws Exception{
@@ -98,7 +340,7 @@ public class NIOTest {
         CharsetDecoder cd = cs1.newDecoder();
 
         CharBuffer cBuf = CharBuffer.allocate(1024);
-        cBuf.put("尚硅谷威武！");
+        cBuf.put("梁冬妙大美女！");
         cBuf.flip();
 
         //编码
@@ -258,8 +500,8 @@ public class NIOTest {
 
 //        dst=new byte[100];//重新分配dst后，输出cde
         System.out.println("bf.limit()-bf.position()="+(bf.limit()-bf.position()));
-        bf.get(dst,bf.position(),bf.limit()-bf.position());
-        System.out.println(new String(dst));//为毛输出abcde  而不是abcdcde的呢？
+        bf.get(dst,4,bf.limit()-bf.position());
+        System.out.println(new String(dst));//abcdcde
     }
     @Test
     public void testBuffer(){
