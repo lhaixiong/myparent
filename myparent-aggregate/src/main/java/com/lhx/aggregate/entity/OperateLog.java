@@ -5,8 +5,11 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 操作日志表
+ */
 @Entity
-@Table(name = "operateLog")
+@Table(name = "operate_log")
 public class OperateLog implements Serializable{
     private static final long serialVersionUID = 1L;
     @Id

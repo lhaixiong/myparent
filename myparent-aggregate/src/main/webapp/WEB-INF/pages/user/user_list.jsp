@@ -26,6 +26,7 @@
 
 <body class="gray-bg">
 <div class="container">
+        用户操作:${requestScope.msg}
         <div class="">
             <table id="userTable" class="table table-hover table-striped table-bordered">
                 <caption>用户列表信息</caption>
