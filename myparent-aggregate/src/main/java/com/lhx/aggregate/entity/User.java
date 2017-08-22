@@ -28,7 +28,7 @@ public class User implements Serializable{
     private String accessToken;//访问标示
     private int groupId;//所在组id
     @Column(columnDefinition = "int(11) default 1")
-    private int status;//状态1可用（默认），0不可用
+    private int status=1;//状态1可用（默认），0不可用
     private int errPassTimes;//本次登陆输入密码错误次数
     private Date lassErrPassTimes;//上次数错密码时间
 

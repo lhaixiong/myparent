@@ -3,9 +3,11 @@ package com.lhx.aggregate.config;
 import com.alibaba.fastjson.JSONObject;
 import com.lhx.aggregate.authority.Permission;
 import com.lhx.aggregate.authority.PermissionInfo;
+import com.lhx.aggregate.service.GroupService;
 import com.lhx.aggregate.tools.PackageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -29,18 +31,27 @@ public class AppStart implements ApplicationListener<ContextRefreshedEvent>,Serv
     public static Map<String,PermissionInfo> nodeAuth=new TreeMap<>();//左侧节点和菜单权限
     public static Map<String,PermissionInfo> allAuth=new HashMap<>();//左侧节点、菜单权限和菜单方法权限
     public static Set<String> checkUrls=new HashSet<>();//检测权限url是否冲突，启动用
-
+    @Autowired
+    private GroupService groupService;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         log.info("应用启动中......");
         ApplicationContext ctx = event.getApplicationContext();
+        initUser();
         initAuth(ctx);
     }
 
     @Override
     public void setServletContext(ServletContext servletContext) {
 
+    }
+
+    /**
+     * 初始化用户组和用户
+     */
+    private void initUser(){
+       groupService.initData();
     }
 
     /**
@@ -66,13 +77,17 @@ public class AppStart implements ApplicationListener<ContextRefreshedEvent>,Serv
                 if (ctrMapping != null) {
                    ctrUrl = ctrMapping.value();
                 }
-                PermissionInfo node=new PermissionInfo(pAnnotation);
-                String nodeId=node.getId()+"";
-                if (allAuth.containsKey(nodeId)) {
-                    throw new RuntimeException(controllerClz.getName()+"包含重复的节点权限ID:" +nodeId);
+                PermissionInfo node=null;
+                String nodeId=pAnnotation.id()+"";
+                if (!allAuth.containsKey(nodeId)) {
+                    node=new PermissionInfo(pAnnotation);
+                    nodeAuth.put(nodeId,node);
+                    allAuth.put(nodeId,node);
+                    //Controller中权限注解可以重复
+//                    throw new RuntimeException(controllerClz.getName()+"包含重复的节点权限ID:" +nodeId);
                 }
-                nodeAuth.put(nodeId,node);
-                allAuth.put(nodeId,node);
+                node=nodeAuth.get(nodeId);
+
 
                 //2菜单权限处理
                 //2.1主菜单入口处理
@@ -129,21 +144,18 @@ public class AppStart implements ApplicationListener<ContextRefreshedEvent>,Serv
             //对菜单排序
             for (PermissionInfo info : nodeAuth.values()) {
                 List<PermissionInfo> nodeSubPermission = info.getSubPermission();
-                for (PermissionInfo menu : nodeSubPermission) {
-                    List<PermissionInfo> menuSubPermission = menu.getSubPermission();
-                    Collections.sort(menuSubPermission, new Comparator<PermissionInfo>() {
-                        @Override
-                        public int compare(PermissionInfo o1, PermissionInfo o2) {
-                            if (o1.getId() < o2.getId()) {
-                                return -1;
-                            } else if (o1.getId() > o2.getId()) {
-                                return 1;
-                            } else {
-                                return 0;
-                            }
+                Collections.sort(nodeSubPermission, new Comparator<PermissionInfo>() {
+                    @Override
+                    public int compare(PermissionInfo o1, PermissionInfo o2) {
+                        if (o1.getId() < o2.getId()) {
+                            return -1;
+                        } else if (o1.getId() > o2.getId()) {
+                            return 1;
+                        } else {
+                            return 0;
                         }
-                    });
-                }
+                    }
+                });
             }
             log.info("节点和菜单权限结构:{}", JSONObject.toJSONString(nodeAuth));
             log.info("初始化权限信息结束...");

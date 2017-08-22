@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/user")
-@Permission(id = 10,parent = 0,type = PermissionInfo.TYPE_NODE,name = "运营管理",icon = "",sort = 10)
+@Permission(id = 10,parent = 0,type = PermissionInfo.TYPE_NODE,name = "后台管理",icon = "",sort = 10)
 public class UserController {
     @Autowired
     private UserService service;

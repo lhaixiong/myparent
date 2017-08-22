@@ -17,8 +17,8 @@ public class Group implements Serializable{
     private String name;//用户组名称
     private int creater;//创建者
     private Date createTime;//创建时间
-    @Column(columnDefinition = "int(11) default 1")
-    private int status;//用户组状态1可用（默认），0不可用
+    @Column(columnDefinition = "int(11) default 1")//废物，默认不生效
+    private int status=1;//用户组状态1可用（默认），0不可用
     @Column(columnDefinition = "int(11) default 0")
     private int type;//用户组类型，0普通组(默认)，1超级组
 

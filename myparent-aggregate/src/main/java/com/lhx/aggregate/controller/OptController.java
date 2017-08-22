@@ -9,10 +9,10 @@ import com.lhx.aggregate.authority.PermissionInfo;
 
 @Controller
 @RequestMapping("/opt")
-@Permission(id = 20,parent = 0,type = PermissionInfo.TYPE_NODE,name = "基础管理",icon = "",sort = 20)
+@Permission(id = 20,parent = 0,type = PermissionInfo.TYPE_NODE,name = "数据分析",icon = "",sort = 20)
 public class OptController {
     @RequestMapping("/list")
-    @Permission(id = 2100,parent = 20,type = PermissionInfo.TYPE_MENU,name = "opt列表",icon = "",sort = 2100)
+    @Permission(id = 2000,parent = 20,type = PermissionInfo.TYPE_MENU,name = "opt列表",icon = "",sort = 2000)
     public ModelAndView list(){
         ModelAndView mv=new ModelAndView("/opt/opt_list");
         mv.addObject("msg","opt列表");

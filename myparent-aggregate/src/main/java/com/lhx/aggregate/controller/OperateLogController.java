@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/operatelog")
-@Permission(id = 11,parent = 0,type = PermissionInfo.TYPE_NODE,name = "运营管理",icon = "",sort = 11)
+@Permission(id = 10,parent = 0,type = PermissionInfo.TYPE_NODE,name = "后台管理",icon = "",sort = 10)
 public class OperateLogController {
     @RequestMapping("/list")
     @Permission(id = 1100,parent = 20,type = PermissionInfo.TYPE_MENU,name = "操作日志列表",icon = "",sort = 1100)

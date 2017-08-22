@@ -59,32 +59,23 @@
                     </div>
                 </li>
                 <%--菜单开始--%>
+                <%--<li>--%>
+                    <%--<a href="#">--%>
+                        <%--<i class="fa fa-home"></i>--%>
+                        <%--<span class="nav-label">主页</span>--%>
+                        <%--<span class="fa arrow"></span>--%>
+                    <%--</a>--%>
+                    <%--<ul class="nav nav-second-level">--%>
+                        <%--<li>--%>
+                            <%--<a class="J_menuItem" href="/login/main" data-index="1">控制面板</a>--%>
+                        <%--</li>--%>
+                        <%--<li>--%>
+                            <%--<a class="J_menuItem" href="/user/list">用户列表</a>--%>
+                        <%--</li>--%>
+                    <%--</ul>--%>
+                <%--</li>--%>
                 <li>
-                    <a href="#">
-                        <i class="fa fa-home"></i>
-                        <span class="nav-label">主页</span>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul class="nav nav-second-level">
-                        <li>
-                            <a class="J_menuItem" href="/login/main" data-index="0">控制面板</a>
-                        </li>
-                        <li>
-                            <a class="J_menuItem" href="/user/list">用户列表</a>
-                        </li>
-                        <li>
-                            <a class="J_menuItem" href="index_v3.html">主页示例三</a>
-                        </li>
-                        <li>
-                            <a class="J_menuItem" href="index_v4.html">主页示例四</a>
-                        </li>
-                        <li>
-                            <a href="index_v5.html" target="_blank">主页示例五</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="J_menuItem"  href="/user/list" ><i class="fa fa-columns"></i> <span class="nav-label">用户列表</span></a>
+                    <li><a class="J_menuItem" href="/login/main"><i class="fa fa-columns"></i> <span class="nav-label">控制面板</span></a></li>
                 </li>
 
             </ul>
@@ -196,7 +187,7 @@
             </button>
             <nav class="page-tabs J_menuTabs">
                 <div class="page-tabs-content" id="page-tabs-content">
-                    <a href="javascript:;" class="active J_menuTab" data-id="1">首页</a>
+                    <a href="javascript:;" class="active J_menuTab" data-id="/login/main">控制面板</a>
                 </div>
             </nav>
             <button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i>
@@ -218,7 +209,7 @@
             <a href="/login.jsp" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
         </div>
         <div class="row J_mainContent" id="content-main">
-            <iframe class="J_iframe" id="iframe1" name="iframe1" width="100%" height="100%" src="/login/main" frameborder="0" data-id="1" seamless></iframe>
+            <iframe class="J_iframe" id="iframe1" name="iframe1" width="100%" height="100%" src="/login/main" frameborder="0" data-id="/login/main" seamless></iframe>
         </div>
         <%--底部--%>
         <div class="footer">
@@ -548,12 +539,38 @@
 <script src="<%=bashPath%>/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 <script src="<%=bashPath%>/js/plugins/layer/layer.min.js"></script>
 <script src="<%=bashPath%>/js/hplus.min.js?v=4.1.0"></script>
-<script src="<%=bashPath%>/js/contabs.min.js"></script>
-<script src="<%=bashPath%>/js/plugins/pace/pace.min.js"></script>
 <script>
     $(function(){
-
+        initMenu();
     });
+    function initMenu(){
+//        var firstMenuHtml='<li><a href="#"><i class="fa fa-home"></i><span class="nav-label">'+firstMenu.name+'</span><span class="fa arrow"></span></a>'+
+//        '    <ul class="nav nav-second-level collapse">'+
+//        '        <li><a class="J_menuItem" href="/login/main" data-index="0">控制面板</a></li>'+
+//        '        <li><a class="J_menuItem" href="/user/list" data-index="1">用户列表</a></li>'+
+//        '    </ul>'+
+//        '</li>'
+        var menuObj=<%=request.getAttribute("menuMap")%>;
+        var menuHtml='';
+        for(var pro in menuObj){
+            var firstMenu=menuObj[pro];
+            var secondMenuList=firstMenu["subPermission"];
+            var firstMenuHtml='<li><a href="#"><i class="fa fa-home"></i><span class="nav-label">'+firstMenu["name"]+'</span><span class="fa arrow"></span></a>'+
+                    ' <ul class="nav nav-second-level collapse">';
+            $.each(secondMenuList,function(i,secondMenu){
+                var secondMenuHtml='<li><a class="J_menuItem" href="'+secondMenu["accessUrl"]+'" data-index="'+secondMenu["id"]+'">'+secondMenu["name"]+'</a></li>';
+                firstMenuHtml+=secondMenuHtml;
+            });
+            firstMenuHtml+="</ul></li>";
+            menuHtml+=firstMenuHtml;
+        }
+        //1添加左侧菜单
+        $("#side-menu").append(menuHtml);
+        //2初始化菜单插件
+        $("#side-menu").metisMenu({});
+    }
 </script>
+<script src="<%=bashPath%>/js/contabs.min.js"></script><!--先后顺序重要！！！，该js必须放在构建好菜单后-->
+<script src="<%=bashPath%>/js/plugins/pace/pace.min.js"></script>
 </body>
 </html>
