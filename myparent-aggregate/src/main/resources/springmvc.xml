@@ -15,7 +15,7 @@
     <mvc:annotation-driven />
     <!--<mvc:annotation-driven conversion-service="conversionService"/>-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/pages/"/>
+        <property name="prefix" value="/WEB-INF/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
 
@@ -47,15 +47,27 @@
         <tx:annotation-driven transaction-manager="transactionManager"/>
         <tx:advice id="txAdvice" transaction-manager="transactionManager">
             <tx:attributes>
-                <tx:method name="*" propagation="REQUIRED" isolation="READ_COMMITTED"/>
+                <tx:method name="*" propagation="REQUIRED" isolation="READ_COMMITTED" rollback-for="Exception"/>
             </tx:attributes>
         </tx:advice>
 
         <aop:aspectj-autoproxy proxy-target-class="true"/>
         <aop:config>
-            <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.lhx.aggregate.service.*.*(..))"/>
+            <!--<aop:advisor advice-ref="txAdvice" pointcut="execution(* com.lhx.aggregate.service.*.*(..)) || execution(* com.lhx.aggregate.dao.impl.*Impl.*(..))"/>-->
+            <aop:advisor advice-ref="txAdvice" pointcut="execution(public * com.lhx.aggregate.service.*.*(..))"/>
         </aop:config>
     <!-- .....................................Spring+Hibernate配置 end............................. -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+           <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/login"/>
+            <mvc:exclude-mapping path="/logout"/>
+            <mvc:exclude-mapping path="/generateImage"/>
+            <mvc:exclude-mapping path="/main"/>
+            <bean class="com.lhx.aggregate.interceptor.OperateLogInterceptor">
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
     <!--<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">-->
         <!--<property name="basename" value="i18n"/>-->

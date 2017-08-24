@@ -208,4 +208,10 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     public int excuteSql(String sql) {
         return getCurrentSession().createSQLQuery(sql).executeUpdate();
     }
+
+    @Override
+    public T getById(Serializable id, Class<T> clz) {
+        return getCurrentSession().get(clz,id);
+    }
+
 }

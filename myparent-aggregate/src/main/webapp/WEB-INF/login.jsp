@@ -33,12 +33,16 @@
         </div>
         <h3>欢迎使用 H+</h3>
 
-        <form class="m-t" role="form" action="/login/">
+        <form class="m-t" role="form" method="post" action="/login">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="用户名" required="">
+                <input type="text" id="account" name="account" class="form-control" placeholder="用户名" required="">
             </div>
             <div class="form-group">
-                <input type="password" class="form-control" placeholder="密码" required="">
+                <input type="password" name="password" class="form-control" placeholder="密码" required="">
+            </div>
+            <div class="form-group">
+                <input name="code" class="form-control" type="text" placeholder='验证码' required="">
+                <img id="yzm" src="/generateImage"> <a id="kanbuq" href="javascript:chanage();">换一个</a> </div>
             </div>
             <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
 
@@ -52,8 +56,17 @@
 <script src="<%=bashPath%>/js/bootstrap.min.js?v=3.3.6"></script>
 <script >
     $(function(){
-
+        if (top != self) {
+            top.location = self.location;
+        }
+        $("#account").focus();
+        <c:if test="${! empty requestScope.msg}">
+            alert('${msg}');
+        </c:if>
     });
+    function chanage(){
+        jQuery("#yzm").attr("src","/generateImage?"+Math.random());
+    }
 </script>
 </body>
 </html>

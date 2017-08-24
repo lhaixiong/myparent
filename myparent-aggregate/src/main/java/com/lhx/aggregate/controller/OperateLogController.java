@@ -11,21 +11,21 @@ import org.springframework.web.servlet.ModelAndView;
 @Permission(id = 10,parent = 0,type = PermissionInfo.TYPE_NODE,name = "后台管理",icon = "",sort = 10)
 public class OperateLogController {
     @RequestMapping("/list")
-    @Permission(id = 1100,parent = 20,type = PermissionInfo.TYPE_MENU,name = "操作日志列表",icon = "",sort = 1100)
+    @Permission(id = 1200,parent = 10,type = PermissionInfo.TYPE_MENU,name = "操作日志列表",icon = "",sort = 1200)
     public ModelAndView list(){
         ModelAndView mv=new ModelAndView("/operatelog/operatelog_list");
         mv.addObject("msg","操作日志列表");
         return mv;
     }
     @RequestMapping("/add")
-    @Permission(id = 1101,parent = 20,type = PermissionInfo.TYPE_BUTTON,name = "添加操作日志列表",icon = "",sort = 1101)
+    @Permission(id = 1201,parent = 10,type = PermissionInfo.TYPE_BUTTON,name = "添加操作日志列表",icon = "",sort = 1201)
     public ModelAndView add(){
         ModelAndView mv=new ModelAndView("/operatelog/operatelog_list");
         mv.addObject("msg","添加操作日志列表");
         return mv;
     }
     @RequestMapping("/del")
-    @Permission(id = 1102,parent = 20,type = PermissionInfo.TYPE_BUTTON,name = "删除操作日志列表",icon = "",sort = 1102)
+    @Permission(id = 1202,parent = 10,type = PermissionInfo.TYPE_BUTTON,name = "删除操作日志列表",icon = "",sort = 1202)
     public ModelAndView del(){
         ModelAndView mv=new ModelAndView("/operatelog/operatelog_list");
         mv.addObject("msg","删除操作日志列表");

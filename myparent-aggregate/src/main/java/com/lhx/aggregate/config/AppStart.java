@@ -29,7 +29,7 @@ public class AppStart implements ApplicationListener<ContextRefreshedEvent>,Serv
     
     public static String PACKAGE_PATH="com.lhx.aggregate.controller";//要扫描的包
     public static Map<String,PermissionInfo> nodeAuth=new TreeMap<>();//左侧节点和菜单权限
-    public static Map<String,PermissionInfo> allAuth=new HashMap<>();//左侧节点、菜单权限和菜单方法权限
+    public static Map<String,PermissionInfo> allAuth=new HashMap<>();//左侧节点、菜单权限和按钮权限
     public static Set<String> checkUrls=new HashSet<>();//检测权限url是否冲突，启动用
     @Autowired
     private GroupService groupService;
@@ -162,5 +162,24 @@ public class AppStart implements ApplicationListener<ContextRefreshedEvent>,Serv
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Map<String, PermissionInfo> getAllAuth() {
+        return allAuth;
+    }
+
+    public static Map<String, PermissionInfo> getNodeAuth() {
+        return nodeAuth;
+    }
+    public static PermissionInfo getPerByAccessUrl(String accessUrl){
+        for (PermissionInfo info : allAuth.values()) {
+            if(info.getType()==PermissionInfo.TYPE_NODE){
+                continue;
+            }
+            if (info.getAccessUrl().equals(accessUrl)) {
+                return info;
+            }
+        }
+        return null;
     }
 }

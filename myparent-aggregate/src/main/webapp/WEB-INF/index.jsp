@@ -10,13 +10,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
-    <title>H+ 后台主题UI框架 - 主页</title>
+    <title>主页</title>
 
     <!--[if lt IE 9]>
     <meta http-equiv="refresh" content="0;ie.html" />
     <![endif]-->
 
-    <link rel="shortcut icon" href="<%=bashPath%>//img/favicon.ico">
+    <link rel="shortcut icon" href="<%=bashPath%>/img/favicon.ico">
     <link href="<%=bashPath%>/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
     <link href="<%=bashPath%>/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
     <link href="<%=bashPath%>/css/animate.min.css" rel="stylesheet">
@@ -51,7 +51,7 @@
                             <li><a class="J_menuItem" href="mailbox.html">信箱</a>
                             </li>
                             <li class="divider"></li>
-                            <li><a href="login.html">安全退出</a>
+                            <li><a href="#" onclick="logout()">安全退出</a>
                             </li>
                         </ul>
                     </div>
@@ -67,7 +67,7 @@
                     <%--</a>--%>
                     <%--<ul class="nav nav-second-level">--%>
                         <%--<li>--%>
-                            <%--<a class="J_menuItem" href="/login/main" data-index="1">控制面板</a>--%>
+                            <%--<a class="J_menuItem" href="/main" data-index="1">控制面板</a>--%>
                         <%--</li>--%>
                         <%--<li>--%>
                             <%--<a class="J_menuItem" href="/user/list">用户列表</a>--%>
@@ -75,7 +75,7 @@
                     <%--</ul>--%>
                 <%--</li>--%>
                 <li>
-                    <li><a class="J_menuItem" href="/login/main"><i class="fa fa-columns"></i> <span class="nav-label">控制面板</span></a></li>
+                    <li><a class="J_menuItem" href="/main"><i class="fa fa-columns"></i> <span class="nav-label">控制面板</span></a></li>
                 </li>
 
             </ul>
@@ -187,7 +187,7 @@
             </button>
             <nav class="page-tabs J_menuTabs">
                 <div class="page-tabs-content" id="page-tabs-content">
-                    <a href="javascript:;" class="active J_menuTab" data-id="/login/main">控制面板</a>
+                    <a href="javascript:;" class="active J_menuTab" data-id="/main">控制面板</a>
                 </div>
             </nav>
             <button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i>
@@ -206,10 +206,10 @@
                     </li>
                 </ul>
             </div>
-            <a href="/login.jsp" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
+            <a href="#" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
         </div>
         <div class="row J_mainContent" id="content-main">
-            <iframe class="J_iframe" id="iframe1" name="iframe1" width="100%" height="100%" src="/login/main" frameborder="0" data-id="/login/main" seamless></iframe>
+            <iframe class="J_iframe" id="iframe1" name="iframe1" width="100%" height="100%" src="/main" frameborder="0" data-id="/main" seamless></iframe>
         </div>
         <%--底部--%>
         <div class="footer">
@@ -541,25 +541,37 @@
 <script src="<%=bashPath%>/js/hplus.min.js?v=4.1.0"></script>
 <script>
     $(function(){
+        if (top != self) {
+            top.location = self.location;
+        }
         initMenu();
     });
     function initMenu(){
 //        var firstMenuHtml='<li><a href="#"><i class="fa fa-home"></i><span class="nav-label">'+firstMenu.name+'</span><span class="fa arrow"></span></a>'+
 //        '    <ul class="nav nav-second-level collapse">'+
-//        '        <li><a class="J_menuItem" href="/login/main" data-index="0">控制面板</a></li>'+
+//        '        <li><a class="J_menuItem" href="/main" data-index="0">控制面板</a></li>'+
 //        '        <li><a class="J_menuItem" href="/user/list" data-index="1">用户列表</a></li>'+
 //        '    </ul>'+
 //        '</li>'
         var menuObj=<%=request.getAttribute("menuMap")%>;
+        var userPidsArr=<%=session.getAttribute("session_user_auth")%>;
         var menuHtml='';
         for(var pro in menuObj){
             var firstMenu=menuObj[pro];
+            var nodeId=firstMenu.id;
+            if($.inArray(nodeId,userPidsArr)==-1){//用户没有该一级菜单
+                continue;
+            }
             var secondMenuList=firstMenu["subPermission"];
             var firstMenuHtml='<li><a href="#"><i class="fa fa-home"></i><span class="nav-label">'+firstMenu["name"]+'</span><span class="fa arrow"></span></a>'+
                     ' <ul class="nav nav-second-level collapse">';
             $.each(secondMenuList,function(i,secondMenu){
+                var secondMenuId=secondMenu["id"];
                 var secondMenuHtml='<li><a class="J_menuItem" href="'+secondMenu["accessUrl"]+'" data-index="'+secondMenu["id"]+'">'+secondMenu["name"]+'</a></li>';
-                firstMenuHtml+=secondMenuHtml;
+                if($.inArray(nodeId,userPidsArr)!=-1){//用户有该二级菜单
+                    firstMenuHtml+=secondMenuHtml;
+                }
+
             });
             firstMenuHtml+="</ul></li>";
             menuHtml+=firstMenuHtml;
@@ -568,6 +580,11 @@
         $("#side-menu").append(menuHtml);
         //2初始化菜单插件
         $("#side-menu").metisMenu({});
+    }
+    function logout(){
+        if(confirm('确定退出么？')){
+            top.location.href = "/logout";
+        }
     }
 </script>
 <script src="<%=bashPath%>/js/contabs.min.js"></script><!--先后顺序重要！！！，该js必须放在构建好菜单后-->
