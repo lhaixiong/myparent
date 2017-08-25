@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <div style="text-align: center;">
-                    <button type="button" class="btn btn-primary" onclick="submitForm()">提交</button>
+                    <button type="button" class="btn btn-primary" onclick="submitForm(this)">提交</button>
                     <button type="button" class="btn btn-default" onclick="closeWindow()">取消</button>
                 </div>
             </form>
@@ -80,7 +80,7 @@
         alert('${msg}');
         </c:if>
     })
-    function submitForm(){
+    function submitForm(me){
         if($("#groupId").val()==-1){
             alert('请选择用户组!');
             return;
@@ -90,12 +90,14 @@
         for(var i=0;i<arr.length;i++){
             data[arr[i].name]=arr[i].value;
         }
+        $(me).attr("disabled",true);
         $.ajax({
             type:"POST",
             url:"/user/saveOrUpdate",
             data:data,
             dataType:"json",
             success:function(result){
+                $(me).attr("disabled",false);
                 alert(result.info);
                 if(200==result.code){
                     closeWindow();

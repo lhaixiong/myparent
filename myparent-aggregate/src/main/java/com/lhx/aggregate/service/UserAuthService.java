@@ -44,7 +44,7 @@ public class UserAuthService {
 
     public int updateUserAuth(int uid, String pIds, HttpServletRequest req) {
         int result = AppConstant.CODE_FAIL;
-        User user = userDao.getById(uid, User.class);
+        User user = userDao.getById(uid);
         if (null == user) {
             log.info("用户不存在!权限更新失败!");
             return result;
@@ -71,7 +71,7 @@ public class UserAuthService {
             }
             for (Integer oldPermission : oldPermissions.keySet()) {
                 if (!newPermissions.contains(oldPermission)) {// 这些没用了，删掉
-                    userAuthDao.delete(oldPermissions.get(oldPermission).getId());
+                    userAuthDao.delete(oldPermissions.get(oldPermission));
                 }
             }
             result = AppConstant.CODE_SUC;

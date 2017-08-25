@@ -39,7 +39,7 @@ public class UserService {
     }
 
     public User getById(Integer id) {
-        return dao.getById(id,User.class);
+        return dao.getById(id);
     }
 
     public void saveOrUpdate(User user) {
@@ -47,7 +47,7 @@ public class UserService {
     }
 
     public void deleteById(Integer id) {
-        dao.delete(id);
+        dao.deleteById(id);
     }
 
     public void batDelete(String ids) {
@@ -80,7 +80,7 @@ public class UserService {
         }else if(opt==AppConstant.OPT_EDIT){
             int id=Integer.parseInt(paramMap.get("id"));
             int newGroupId=Integer.parseInt(paramMap.get("groupId"));
-            User user=dao.getById(id,User.class);
+            User user=dao.getById(id);
             int oldGroupId=user.getGroupId();
             user.setAccount(paramMap.get("account"));
             user.setPassword(paramMap.get("password"));
@@ -104,7 +104,7 @@ public class UserService {
         if (null == user) {
             return;
         }
-        Group group = groupDao.getById(user.getGroupId(),Group.class);
+        Group group = groupDao.getById(user.getGroupId());
         if (null == group) {
             return;
         }
@@ -131,11 +131,11 @@ public class UserService {
      * @param req
      */
     private void updateUserAuth(int uid, int groupId, HttpServletRequest req) {
-        User user = dao.getById(uid,User.class);
+        User user = dao.getById(uid);
         if (null == user) {
             return;
         }
-        Group group = groupDao.getById(groupId, Group.class);
+        Group group = groupDao.getById(groupId);
         if (null == group) {
             return;
         }
@@ -143,7 +143,7 @@ public class UserService {
                 .getAttribute(AppConstant.SESSION_LOGIN_USER);
         Map<Integer, UserAuth> oldPers = userAuthDao.getUserPermission(uid);
         for (UserAuth ua : oldPers.values()) {// 删掉之前的
-            userAuthDao.delete(ua.getId());
+            userAuthDao.delete(ua);
         }
         Map<Integer, GroupAuth> newPers = groupAuthDao
                 .getGroupPermission(groupId);

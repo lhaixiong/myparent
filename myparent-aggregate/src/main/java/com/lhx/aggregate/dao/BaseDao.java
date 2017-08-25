@@ -25,14 +25,16 @@ public interface BaseDao<T> {
      */
     void saveOrUpdate(T o);
 
-    //此处要改成两个deleteById(Serializable id);
-    //此处要改成delete(T o);
     /**
      * 通过id删除一个对象
      * @param id
      */
-    void delete(Serializable id);
-
+    void deleteById(Serializable id);
+    /**
+     * 删除一个对象
+     * @param o
+     */
+    void delete(T o);
     /**
      * 更新对象
      * @param o
@@ -122,6 +124,5 @@ public interface BaseDao<T> {
      */
     int excuteSql(String sql);
 
-    //此处直接变成getById(Serializable id)
-    T getById(Serializable id,Class<T> clz);
+    T getById(Serializable id);
 }

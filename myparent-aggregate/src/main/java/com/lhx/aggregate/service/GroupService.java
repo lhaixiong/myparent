@@ -30,7 +30,7 @@ public class GroupService {
     }
 
     public Group getById(Integer id) {
-        return groupDao.getById(id,Group.class);
+        return groupDao.getById(id);
     }
 
     public void saveOrUpdate(Group group) {
@@ -38,7 +38,7 @@ public class GroupService {
     }
 
     public void deleteById(Integer id) {
-        groupDao.delete(id);
+        groupDao.deleteById(id);
     }
 
     public void batDelete(String ids) {

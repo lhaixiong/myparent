@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class BaseDaoImpl<T> implements BaseDao<T> {
     protected Logger log;
-    private Class clz;
+    private Class<T> clz;
     @Autowired
     private SessionFactory sessionFactory;
     public BaseDaoImpl() {
@@ -48,8 +48,13 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     }
 
     @Override
-    public void delete(Serializable id) {
+    public void deleteById(Serializable id) {
         Object o = getCurrentSession().load(clz, id);
+        getCurrentSession().delete(o);
+    }
+
+    @Override
+    public void delete(T o) {
         getCurrentSession().delete(o);
     }
 
@@ -210,7 +215,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     }
 
     @Override
-    public T getById(Serializable id, Class<T> clz) {
+    public T getById(Serializable id) {
         return getCurrentSession().get(clz,id);
     }
 

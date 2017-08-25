@@ -38,7 +38,7 @@ public class GroupAuthService {
 	 */
 	public int updateGroupAuth(int gid, String pIds, HttpServletRequest req) {
 		int result = AppConstant.CODE_FAIL;
-		Group group = groupDao.getById(gid, Group.class);
+		Group group = groupDao.getById(gid);
 		if (null == group) {
 			log.info("用户组不存在!权限更新失败!");
 			return result;
@@ -67,7 +67,7 @@ public class GroupAuthService {
 			Set<Integer> oldShouldBeDeleted = new HashSet<Integer>();
 			for (Integer oldPermission : oldPermissions.keySet()) {
 				if (!newPermissions.contains(oldPermission)) {// 这些没用了，删掉
-					groupAuthDao.delete(oldPermissions.get(oldPermission).getId());
+					groupAuthDao.delete(oldPermissions.get(oldPermission));
 					oldShouldBeDeleted.add(oldPermission);
 				}
 			}
@@ -90,7 +90,7 @@ public class GroupAuthService {
 			Set<Integer> oldShouldBeDeleted, Set<Integer> newPidSet) {
 		String hql = "from User where groupId = " + gid;
 		List<User> groupUsers = userDao.find(hql);
-		Group group = groupDao.getById(gid, Group.class);
+		Group group = groupDao.getById(gid);
 		if (null != groupUsers && 0 != groupUsers.size()) {
 			for (User user : groupUsers) {
 				String tempHql = "From UserAuth Where userId = " + user.getId();
@@ -100,7 +100,7 @@ public class GroupAuthService {
 				}
 				for (UserAuth userAuth : userAuths) {
 					if (oldShouldBeDeleted.contains(userAuth.getPermisssionId())) {
-						userAuthDao.delete(userAuth.getId());
+						userAuthDao.delete(userAuth);
 					}
 				}
 				userAuths = userAuthDao.find(tempHql);
