@@ -38,7 +38,7 @@
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
                                <span class="block m-t-xs"><strong class="font-bold">Beaut-zihan</strong></span>
-                                <span class="text-muted text-xs block">超级管理员<b class="caret"></b></span>
+                                <span class="text-muted text-xs block">${session_login_user.nickname}<b class="caret"></b></span>
                                 </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
@@ -568,7 +568,7 @@
             $.each(secondMenuList,function(i,secondMenu){
                 var secondMenuId=secondMenu["id"];
                 var secondMenuHtml='<li><a class="J_menuItem" href="'+secondMenu["accessUrl"]+'" data-index="'+secondMenu["id"]+'">'+secondMenu["name"]+'</a></li>';
-                if($.inArray(nodeId,userPidsArr)!=-1){//用户有该二级菜单
+                if($.inArray(secondMenuId,userPidsArr)!=-1){//用户有该二级菜单
                     firstMenuHtml+=secondMenuHtml;
                 }
 

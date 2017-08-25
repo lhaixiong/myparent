@@ -16,7 +16,7 @@
 
 <body class="gray-bg">
 <div class="container" style="width: auto;">
-        <div class="row table-responsive" id="permissionAll">
+        <div class="row table-responsive">
             <table class="table table-hover table-striped table-bordered">
                 <caption>权限列表信息</caption>
                 <thead>
@@ -25,7 +25,7 @@
                     <th >权限名</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="permissionAll">
                 <c:if test="${! empty nodeAuth}">
                     <c:forEach items="${nodeAuth}" var="entry"><%--循环节点集合--%>
                         <c:set var="node" value="${entry.value}"/><%--节点--%>
@@ -59,7 +59,7 @@
             </table>
         </div>
         <div class="text-center">
-            <button class="btn btn-success" onclick="updateUserAuth()">提交</button>
+            <button class="btn btn-success" onclick="updateUserAuth(this)">提交</button>
             <button class="btn btn-primary" onclick="closeWindow()">取消</button>
         </div>
 </div>
@@ -82,12 +82,13 @@
         var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
         parent.layer.close(index);
     }
-    function updateUserAuth(){
+    function updateUserAuth(me){
         var pIds='';
         $("#permissionAll").find("input:checked").each(function(idx,dom){
             pIds+=$(this).val()+",";
         });
         var userId=<%=request.getAttribute("userId")%>;
+        $(me).attr("disabled",true);
         $.ajax({
             type:'post',
             url:'/user/updateUserAuth',
@@ -97,6 +98,7 @@
             },
             dataType:'json',
             success:function(result){
+                $(me).attr("disabled",false);
                 alert(result.info);
                 if(result.code==200){
                     closeWindow();

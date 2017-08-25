@@ -25,7 +25,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 public class LoginController {
@@ -38,34 +40,40 @@ public class LoginController {
     //登陆
     @RequestMapping("/login")
     public ModelAndView login(String account,String password,String code,HttpServletRequest req){
-        HttpSession session = req.getSession();
-        User loginUser= (User) session.getAttribute(AppConstant.SESSION_LOGIN_USER);
-        if (loginUser != null) {
-            return index();
+        try {
+            HttpSession session = req.getSession();
+            User loginUser= (User) session.getAttribute(AppConstant.SESSION_LOGIN_USER);
+            if (loginUser != null) {
+                return index();
+            }
+            String scode= (String) session.getAttribute("code");
+            if (!StringUtils.endsWithIgnoreCase(code, scode)) {
+                req.setAttribute("msg","验证码不正确");
+                ModelAndView mv=new ModelAndView("login");
+                return mv;
+            }
+            //1认证
+            loginUser = userService.getLoginUser(account, password);
+            if (loginUser == null) {
+                req.setAttribute("msg","账号或密码错误!");
+                ModelAndView mv=new ModelAndView("login");
+                return mv;
+            }
+            session.setAttribute(AppConstant.SESSION_LOGIN_USER,loginUser);
+            //2授权信息
+            Map<Integer, UserAuth> uas = userAuthService.getUserPermissions(loginUser.getId());
+            Set<Integer> pIdSet = uas.keySet();
+            Group group = groupService.getById(loginUser.getGroupId());
+            if(group.getType()==AppConstant.GROUP_ADMIN&&pIdSet.isEmpty()){//用户属于管理员组并且上没有分配权限
+                pIdSet=new HashSet<>();
+                for (String pid : AppStart.allAuth.keySet()) {
+                    pIdSet.add(Integer.parseInt(pid));
+                }
+            }
+            session.setAttribute(AppConstant.SESSION_USER_AUTH,pIdSet);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        String scode= (String) session.getAttribute("code");
-        if (!StringUtils.endsWithIgnoreCase(code, scode)) {
-            req.setAttribute("msg","验证码不正确");
-            ModelAndView mv=new ModelAndView("login");
-            return mv;
-        }
-        //1认证
-        loginUser = userService.getLoginUser(account, password);
-        if (loginUser == null) {
-            req.setAttribute("msg","账号或密码错误!");
-            ModelAndView mv=new ModelAndView("login");
-            return mv;
-        }
-        session.setAttribute(AppConstant.SESSION_LOGIN_USER,loginUser);
-        //2授权信息
-        Map<Integer, UserAuth> uas = userAuthService.getUserPermissions(loginUser.getId());
-        Group group = groupService.getById(loginUser.getGroupId());
-        if(group.getType()==AppConstant.GROUP_ADMIN&&uas.isEmpty()){//用户属于管理员并且上没有分配权限
-            //未完成
-            userAuthService.initAdminAuth();
-            uas = userAuthService.getUserPermissions(loginUser.getId());
-        }
-        session.setAttribute(AppConstant.SESSION_USER_AUTH,uas.keySet());
         return index();
     }
 

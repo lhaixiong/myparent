@@ -99,8 +99,4 @@ public class UserAuthService {
         return result;
     }
 
-    public void initAdminAuth() {
-        //未完成,
-        AppStart.getAllAuth();
-    }
 }

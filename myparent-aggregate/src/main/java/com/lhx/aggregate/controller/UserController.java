@@ -138,27 +138,6 @@ public class UserController {
      * 权限更新
      *
      * @return
-     * @since 2015年12月22日 下午2:55:35
-     */
-//    @RequestMapping(value = "/updateGroupAuth",produces = {"text/html;charset=UTF-8"})
-//    @Permission(id = 1007,parent = 10,type = PermissionInfo.TYPE_BUTTON,name = "更新组权限",icon = "",sort = 1007)
-//    @ResponseBody
-//    public String updateGroupAuth(int gid, String pIds, HttpServletRequest req) {
-//        JSONObject result=new JSONObject();
-//        int code=AppConstant.CODE_SUC;
-//        String info="操作成功!";
-//        code = groupAuthService.updateGroupAuth(gid, pIds, req);
-//        if(code!=AppConstant.CODE_SUC){
-//            info="操作失败!";
-//        }
-//        result.put("code",code);
-//        result.put("info",info);
-//        return JSONObject.toJSONString(result);
-//    }
-    /**
-     * 权限更新
-     *
-     * @return
      */
     @RequestMapping(value = "/updateUserAuth",produces = {"text/html;charset=UTF-8"})
     @Permission(id = 1106,parent = 10,type = PermissionInfo.TYPE_BUTTON,name = "更新用户权限",icon = "",sort = 1106)

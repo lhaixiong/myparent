@@ -90,11 +90,12 @@ public class GroupAuthService {
 			Set<Integer> oldShouldBeDeleted, Set<Integer> newPidSet) {
 		String hql = "from User where groupId = " + gid;
 		List<User> groupUsers = userDao.find(hql);
+		Group group = groupDao.getById(gid, Group.class);
 		if (null != groupUsers && 0 != groupUsers.size()) {
 			for (User user : groupUsers) {
 				String tempHql = "From UserAuth Where userId = " + user.getId();
 				List<UserAuth> userAuths = userAuthDao.find(tempHql);
-				if (null == userAuths || 0 == userAuths.size()) {
+				if ((null == userAuths || 0 == userAuths.size())&&group.getType()!=AppConstant.GROUP_ADMIN) {
 					continue;
 				}
 				for (UserAuth userAuth : userAuths) {
