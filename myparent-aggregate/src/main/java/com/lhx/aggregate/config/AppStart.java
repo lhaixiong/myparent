@@ -38,13 +38,14 @@ public class AppStart implements ApplicationListener<ContextRefreshedEvent>,Serv
     public void onApplicationEvent(ContextRefreshedEvent event) {
         log.info("应用启动中......");
         ApplicationContext ctx = event.getApplicationContext();
+        AppContext.setApplicationContext(ctx);
         initUser();
         initAuth(ctx);
     }
 
     @Override
     public void setServletContext(ServletContext servletContext) {
-
+        AppContext.setServletcontext(servletContext);
     }
 
     /**
@@ -177,6 +178,9 @@ public class AppStart implements ApplicationListener<ContextRefreshedEvent>,Serv
                 continue;
             }
             if (info.getAccessUrl().equals(accessUrl)) {
+                return info;
+            }
+            if(info.getBtnUrls().contains(accessUrl)){
                 return info;
             }
         }
