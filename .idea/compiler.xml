@@ -22,13 +22,18 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="myparent-aggregate" />
         <module name="myparent-base" />
         <module name="myparent-base2" />
+        <module name="myparent-mina" />
         <module name="myparent-s2" />
         <module name="myparent-s3" />
         <module name="myparent-sh" />
         <module name="myparetn-h1" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="myparent-aggregate" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

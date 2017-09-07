@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../js/jquery.min.js"></script>
+</head>
+<body>
+    <div id="abc">abc</div>
+    <div><div id="b" data="bb" style="background-color: #ff0000" onclick="bbClick(this)">bb</div></div>
+<script>
+    function bbClick(me){
+        console.info(me);
+        console.info(me.clientHeight);
+        console.info(typeof me);
+        console.info($(me));
+        console.info($("#b"));
+        $(me).each(function(idx,dom){
+            console.info(dom);
+            console.info(idx+","+dom+","+(dom==this)+","+this.clientHeight+","+$(this).attr("data"));
+        });
+        console.info($(me).size());
+
+    }
+//        for(var x in document){
+//            console.info(x+":"+document[x]);
+//        }
+//    $("#b").click({aa:"div"},function(e){
+////        e.stopPropagation();
+//        e.preventDefault();
+//       alert(e.data.aa+",type:"+ e.type+",eventPhase:"+ e.eventPhase+",target:"+ e.target);
+//    });
+//$("body").click({bb:"body"},function(e){debugger;
+//    alert(e.data.bb+",type:"+ e.type+",eventPhase:"+ e.eventPhase+",target:"+ e.target);
+//});
+//    for(var x in navigator){
+//        console.info(x+":"+navigator[x]);
+//    }
+//        for(x in location){
+//            console.info(x+":"+location[x]);
+//        }
+//    var p=prompt("丢你啊");
+//    alert(p);
+//    var timeoutId=setTimeout(function(){
+//        alert("setTimeout");
+//    },2000);
+//    clearTimeout(timeoutId);
+    $(function(){
+//        window.moveBy(100,100);
+    });
+//    var x=(typeof window.screenLeft== "number" ?window.screenLeft:window.screenX);
+//    var y=(typeof window.screenTop=="number"?window.screenTop:window.screenY);
+//    console.info("x:"+x+",y:"+y);
+//    console.info("innerWidth:"+window.innerWidth+",innerHeight:"+window.innerHeight);
+//    console.info("outerWidth:"+window.outerWidth+",outerHeight:"+window.outerHeight);
+
+    function Person(name,age){
+        this.name=name;
+        this.age=age;
+    }
+    Person.prototype.sayName=function(name){
+        this.name=name;
+//        alert(this.name);
+//debugger;
+        console.info(name);
+        alert(this.hasOwnProperty("name"));
+    }
+    var person=new Person('lhx',11);
+//    person.sayName("lhj");
+//    console.info(typeof sum);
+//    console.info(sum instanceof Function);
+</script>
+</body>
+</html>

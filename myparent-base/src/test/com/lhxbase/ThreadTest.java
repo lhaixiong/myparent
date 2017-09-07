@@ -155,7 +155,7 @@ setDaemon(boolean on)方法必须在线程启动之前调用，当线程正在�
 
         thread.start();
         try {
-            Thread.sleep(100);
+            Thread.sleep(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

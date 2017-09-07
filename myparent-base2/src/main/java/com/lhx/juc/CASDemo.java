@@ -8,7 +8,8 @@ public class CASDemo {
                @Override
                public void run() {
                    int v=cas.getV();
-                   System.out.println(cas.cas(v, (int) (Math.random()*100)));
+                   int newV=(int) (Math.random()*100);
+                   System.out.println(Thread.currentThread().getName()+"v:"+v+",new:"+newV+",cas:"+cas.cas(v, newV));
                }
            }).start() ;
         }

@@ -15,5 +15,7 @@
     <module>myparent-s3</module>
     <module>myparent-base</module>
     <module>myparent-base2</module>
+    <module>myparent-aggregate</module>
+    <module>myparent-mina</module>
   </modules>
 </project>
