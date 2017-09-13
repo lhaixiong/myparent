@@ -1,4 +1,4 @@
-package com.lhxbase;
+package lhxbase;
 
 import com.lhxbase.dao.Dao;
 import com.lhxbase.entity.Person;
