@@ -58,12 +58,12 @@ public class Car {
                 '}';
     }
     public void initCar(){
-        System.out.println("initCar method is invoked....");
+        System.out.println("3333initCar method is invoked....");
     }
     public Car(){
-        System.out.println("car is constructed");
+        System.out.println("1111car is constructed");
     }
     public void destroyCar(){
-        System.out.println("destroyCar method is invoked...");
+        System.out.println("55555destroyCar method is invoked...");
     }
 }

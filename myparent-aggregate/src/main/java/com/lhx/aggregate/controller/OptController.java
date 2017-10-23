@@ -19,14 +19,14 @@ public class OptController {
         return mv;
     }
     @RequestMapping("/add")
-    @Permission(id = 2001,parent = 20,type = PermissionInfo.TYPE_BUTTON,name = "添加opt列表",icon = "",sort = 2001)
+    @Permission(id = 2001,parent = 2000,type = PermissionInfo.TYPE_BUTTON,name = "添加opt列表",icon = "",sort = 2001)
     public ModelAndView add(){
         ModelAndView mv=new ModelAndView("/opt/opt_list");
         mv.addObject("msg","添加opt列表");
         return mv;
     }
     @RequestMapping("/del")
-    @Permission(id = 2002,parent = 20,type = PermissionInfo.TYPE_BUTTON,name = "删除opt列表",icon = "",sort = 2002)
+    @Permission(id = 2002,parent = 2000,type = PermissionInfo.TYPE_BUTTON,name = "删除opt列表",icon = "",sort = 2002)
     public ModelAndView del(){
         ModelAndView mv=new ModelAndView("/opt/opt_list");
         mv.addObject("msg","删除opt列表");

@@ -118,6 +118,13 @@ import java.util.SortedMap;
  */
 public class NIOTest {
     @Test
+    public void tesp(){
+        String ss="aA汉子";
+        for (byte b : ss.getBytes()) {
+            System.out.println(b+":"+ss.getBytes().length);
+        }
+    }
+    @Test
     public void testPipe() throws IOException{
         //1. 获取管道
         Pipe pipe = Pipe.open();

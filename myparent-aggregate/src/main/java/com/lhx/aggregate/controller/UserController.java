@@ -9,7 +9,6 @@ import com.lhx.aggregate.entity.User;
 import com.lhx.aggregate.service.GroupService;
 import com.lhx.aggregate.service.UserAuthService;
 import com.lhx.aggregate.service.UserService;
-import com.lhx.aggregate.tools.MapUtil;
 import com.lhx.aggregate.tools.ReqUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
@@ -125,7 +123,7 @@ public class UserController {
         return JSONObject.toJSONString(result);
     }
     @RequestMapping(value = "/toUserAuth")
-    @Permission(id = 1105,parent = 10,type = PermissionInfo.TYPE_BUTTON,name = "编辑用户权限",icon = "",sort = 1105)
+    @Permission(id = 1105,parent = 1100,type = PermissionInfo.TYPE_BUTTON,name = "编辑用户权限",icon = "",sort = 1105)
     public ModelAndView toUserAuth(int userId) {
         ModelAndView mav = new ModelAndView("user/user_auth");
         mav.addObject("nodeAuth", AppStart.nodeAuth);
@@ -140,7 +138,7 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/updateUserAuth",produces = {"text/html;charset=UTF-8"})
-    @Permission(id = 1106,parent = 10,type = PermissionInfo.TYPE_BUTTON,name = "更新用户权限",icon = "",sort = 1106)
+    @Permission(id = 1106,parent = 1100,type = PermissionInfo.TYPE_BUTTON,name = "更新用户权限",icon = "",sort = 1106)
     @ResponseBody
     public String updateUserAuth(int userId, String pIds, HttpServletRequest req) {
         JSONObject result=new JSONObject();

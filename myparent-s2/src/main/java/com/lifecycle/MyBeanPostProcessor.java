@@ -8,7 +8,7 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
     public Object postProcessBeforeInitialization(Object o, String s) throws BeansException {
         System.out.println("postProcessBeforeInitialization>>"+o+">>"+s);
         if(o instanceof Car){
-            System.out.println("postProcessBeforeInitialization bbbcaaaaaaaaaaaar");
+            System.out.println("222222postProcessBeforeInitialization bbbcaaaaaaaaaaaar");
         }
         return o;
     }
@@ -17,7 +17,7 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
     public Object postProcessAfterInitialization(Object o, String s) throws BeansException {
         System.out.println("postProcessAfterInitialization>>"+o+">>"+s);
         if(o instanceof Car){
-            System.out.println("postProcessAfterInitialization aaaafcaaaaaaaaaaaar");
+            System.out.println("4444postProcessAfterInitialization aaaafcaaaaaaaaaaaar");
             Car car= (Car) o;
             car.setBrand("fuckbrand");
             return car;

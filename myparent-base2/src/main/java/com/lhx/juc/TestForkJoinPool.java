@@ -1,5 +1,7 @@
 package com.lhx.juc;
 
+import org.junit.Test;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.ForkJoinPool;
@@ -7,14 +9,12 @@ import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveTask;
 import java.util.stream.LongStream;
 
-import org.junit.Test;
-
 public class TestForkJoinPool {
 	
 	public static void main(String[] args) {
 		Instant start = Instant.now();
-		
-		ForkJoinPool pool = new ForkJoinPool();
+
+		ForkJoinPool pool = new ForkJoinPool(8);
 		
 		ForkJoinTask<Long> task = new ForkJoinSumCalculate(0L, 50000000000L);
 		
@@ -24,7 +24,7 @@ public class TestForkJoinPool {
 		
 		Instant end = Instant.now();
 		
-		System.out.println("耗费时间为：" + Duration.between(start, end).toMillis());//166-1996-10590
+		System.out.println("forkjoin耗费时间为：" + Duration.between(start, end).toMillis());//166-1996-10590  22416
 	}
 	
 	@Test
@@ -41,7 +41,7 @@ public class TestForkJoinPool {
 		
 		Instant end = Instant.now();
 		
-		System.out.println("耗费时间为：" + Duration.between(start, end).toMillis());//35-3142-15704
+		System.out.println("不拆分情况下耗费时间为：" + Duration.between(start, end).toMillis());//35-3142-15704  27244
 	}
 	
 	//java8 新特性
@@ -83,7 +83,7 @@ class ForkJoinSumCalculate extends RecursiveTask<Long>{
 	protected Long compute() {
 		long length = end - start;
 		
-		if(length <= THURSHOLD){
+		if(length <= THURSHOLD){//小于等于阈值，执行任务
 			long sum = 0L;
 			
 			for (long i = start; i <= end; i++) {
@@ -91,7 +91,7 @@ class ForkJoinSumCalculate extends RecursiveTask<Long>{
 			}
 			
 			return sum;
-		}else{
+		}else{//大于阈值，任务分割子任务进行计算
 			long middle = (start + end) / 2;
 			
 			ForkJoinSumCalculate left = new ForkJoinSumCalculate(start, middle); 

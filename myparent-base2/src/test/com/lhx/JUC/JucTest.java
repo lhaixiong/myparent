@@ -34,5 +34,9 @@ public class JucTest {
         List<Integer> linkList=new LinkedList<>();
         List<Integer> arrList=new ArrayList<>();
         System.out.println(list.toArray());
+
+        Integer a=100;
+        Integer b=100;
+        System.out.println(a==b);
     }
 }

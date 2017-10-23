@@ -6,6 +6,7 @@ import com.lhx.aggregate.authority.PermissionInfo;
 import com.lhx.aggregate.config.AppConstant;
 import com.lhx.aggregate.config.AppStart;
 import com.lhx.aggregate.entity.Group;
+import com.lhx.aggregate.entity.User;
 import com.lhx.aggregate.service.GroupAuthService;
 import com.lhx.aggregate.service.GroupService;
 import com.lhx.aggregate.tools.ReqUtil;
@@ -71,6 +72,7 @@ public class GroupController {
             return JSONObject.toJSONString(result);
         }
         try {
+            User loginUser= (User) req.getSession().getAttribute(AppConstant.SESSION_LOGIN_USER);
             Map<String, String> paramMap = ReqUtil.getParamMap(req);
             if (opt== AppConstant.OPT_ADD) {
                 Group group=new Group();
@@ -78,6 +80,7 @@ public class GroupController {
                 group.setType(Integer.parseInt(paramMap.get("type")));
                 group.setStatus(Integer.parseInt(paramMap.get("status")));
                 group.setCreateTime(new Date());
+                group.setCreater(loginUser.getId());
                 service.saveOrUpdate(group);
             }else if(opt==AppConstant.OPT_EDIT){
                 String id=paramMap.get("id");
@@ -140,7 +143,7 @@ public class GroupController {
         return JSONObject.toJSONString(result);
     }
     @RequestMapping("/checkGroupUser")
-    @Permission(id = 1005,parent = 10,type = PermissionInfo.TYPE_BUTTON,name = "查看组用户",icon = "",sort = 1005)
+    @Permission(id = 1005,parent = 1000,type = PermissionInfo.TYPE_BUTTON,name = "查看组用户",icon = "",sort = 1005)
     public ModelAndView checkGroupUser(Integer groupId){
         ModelAndView mv=new ModelAndView("/group/group_user_list");
         if (groupId == null) {
@@ -152,7 +155,7 @@ public class GroupController {
         return mv;
     }
     @RequestMapping(value = "/group_auth.html")
-    @Permission(id = 1006,parent = 10,type = PermissionInfo.TYPE_BUTTON,name = "编辑组权限",icon = "",sort = 1006)
+    @Permission(id = 1006,parent = 1000,type = PermissionInfo.TYPE_BUTTON,name = "编辑组权限",icon = "",sort = 1006)
     public ModelAndView toAuthList(int id) {
         ModelAndView mav = new ModelAndView("group/group_auth");
         mav.addObject("nodeAuth", AppStart.nodeAuth);
@@ -168,7 +171,7 @@ public class GroupController {
      * @since 2015年12月22日 下午2:55:35
      */
     @RequestMapping(value = "/updateGroupAuth",produces = {"text/html;charset=UTF-8"})
-    @Permission(id = 1007,parent = 10,type = PermissionInfo.TYPE_BUTTON,name = "更新组权限",icon = "",sort = 1007)
+    @Permission(id = 1007,parent = 1000,type = PermissionInfo.TYPE_BUTTON,name = "更新组权限",icon = "",sort = 1007)
     @ResponseBody
     public String updateGroupAuth(int gid, String pIds, HttpServletRequest req) {
         JSONObject result=new JSONObject();

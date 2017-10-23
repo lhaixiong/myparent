@@ -62,7 +62,7 @@
         alert('${msg}');
         </c:if>
     })
-    function submitForm(){
+    function submitForm(me){
         var arr=$("#detailForm").serializeArray();
         var data={};
         for(var i=0;i<arr.length;i++){

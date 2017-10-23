@@ -4,6 +4,7 @@ import java.util.concurrent.CountDownLatch;
 
 /**
  * CountDownLatch ：闭锁，在完成某些运算是，只有其他所有线程的运算全部完成，当前运算才继续执行
+ * 异步转同步（join也是）
  */
 public class CountDownLatchDemo {
     public static void main(String[] args) {
