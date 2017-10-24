@@ -3,8 +3,7 @@ package com.lhx.aggregate.dao.impl;
 import com.lhx.aggregate.config.AppConstant;
 import com.lhx.aggregate.entity.Group;
 import com.lhx.aggregate.entity.User;
-import org.hibernate.Query;
-import org.hibernate.Session;
+import com.lhx.aggregate.tools.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -27,7 +26,7 @@ public class UserDao extends BaseDaoImpl<User> {
             }
             User user = new User();
             user.setAccount("admin");
-            user.setPassword("123");
+            user.setPassword(MD5Util.MD5Encode("123"));
             user.setNickname("超级管理员");
             user.setCreateTime(new Date());
             user.setGroupId(null == adminGroup ? 1 : adminGroup.getId());

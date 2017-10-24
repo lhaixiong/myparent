@@ -3,6 +3,13 @@ import com.alibaba.fastjson.annotation.JSONField;
 import org.junit.Test;
 
 public class MyTest {
+    @Test
+    public void test02(){
+        String abc="from Oper";
+        int idx=abc.toUpperCase().indexOf("FROM");
+        System.out.println(idx);
+        System.out.println(abc.substring(idx));
+    }
 
     @Test
     public void test01(){

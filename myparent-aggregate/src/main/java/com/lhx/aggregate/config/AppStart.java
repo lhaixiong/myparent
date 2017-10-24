@@ -113,11 +113,16 @@ public class AppStart implements ApplicationListener<ContextRefreshedEvent>,Serv
                         }
                         allAuth.put(menuId, menu);
                         checkUrls.add(accessUrl);
-                        node.getSubPermission().add(menu);
+                        node.getSubPermission().add(menu);//菜单加入上级节点
                         break;
                     }
 
                 }
+
+                if (menu == null) {
+                    throw new RuntimeException(controllerClz.getName()+"下没有菜单入口 (type = PermissionInfo.TYPE_MENU的注解)");
+                }
+
                 //2.2按钮入口处理
                 for (Method method : methods) {
                     Permission mp = method.getAnnotation(Permission.class);
@@ -138,7 +143,7 @@ public class AppStart implements ApplicationListener<ContextRefreshedEvent>,Serv
                         }
                         allAuth.put(buttonId, button);
                         checkUrls.add(accessUrl);
-                        menu.getSubPermission().add(button);
+                        menu.getSubPermission().add(button);//按钮加入上级菜单
                     }
                 }
             }

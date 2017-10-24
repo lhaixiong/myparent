@@ -5,6 +5,7 @@ import com.lhx.aggregate.authority.Permission;
 import com.lhx.aggregate.authority.PermissionInfo;
 import com.lhx.aggregate.config.AppConstant;
 import com.lhx.aggregate.config.AppStart;
+import com.lhx.aggregate.config.PCons;
 import com.lhx.aggregate.entity.Group;
 import com.lhx.aggregate.entity.User;
 import com.lhx.aggregate.service.GroupAuthService;
@@ -26,7 +27,7 @@ import java.util.Set;
 
 @Controller
 @RequestMapping("/group")
-@Permission(id = 10,parent = 0,type = PermissionInfo.TYPE_NODE,name = "后台管理",icon = "",sort = 10)
+@Permission(id = PCons.NODE_ONE,parent = PCons.ROOT,type = PermissionInfo.TYPE_NODE,name = "后台管理",icon = "",sort = PCons.NODE_ONE)
 public class GroupController {
     private static final Logger log= LoggerFactory.getLogger(GroupController.class);
     @Autowired
@@ -34,7 +35,7 @@ public class GroupController {
     @Autowired
     private GroupAuthService groupAuthService;
     @RequestMapping("/list")
-    @Permission(id = 1000,parent = 10,type = PermissionInfo.TYPE_MENU,name = "用户组管理",icon = "",sort = 1000)
+    @Permission(id = PCons.MENU_GROUP,parent = PCons.NODE_ONE,type = PermissionInfo.TYPE_MENU,name = "用户组管理",icon = "",sort = PCons.MENU_GROUP)
     public ModelAndView list(HttpServletRequest req){
         Map<String, String> params = ReqUtil.getParamMap(req);
         ModelAndView mv=new ModelAndView("/group/group_list");
@@ -43,7 +44,7 @@ public class GroupController {
         return mv;
     }
     @RequestMapping("/detail")
-    @Permission(id = 1001,parent = 1000,type = PermissionInfo.TYPE_BUTTON,name = "用户组页面",icon = "",sort = 1001)
+    @Permission(id = PCons.GR1,parent = PCons.MENU_GROUP,type = PermissionInfo.TYPE_BUTTON,name = "用户组查看",icon = "",sort = PCons.GR1)
     public ModelAndView detail(Integer id,Integer opt){
         ModelAndView mv=new ModelAndView("/group/group_detail");
         Group group=null;
@@ -60,7 +61,7 @@ public class GroupController {
         return mv;
     }
     @RequestMapping(value = "/saveOrUpdate",produces = {"text/html;charset=UTF-8"})
-    @Permission(id = 1002,parent = 1000,type = PermissionInfo.TYPE_BUTTON,name = "添加或修改组",icon = "",sort = 1002)
+    @Permission(id = PCons.GR2,parent = PCons.MENU_GROUP,type = PermissionInfo.TYPE_BUTTON,name = "添加或修改组",icon = "",sort = PCons.GR2)
     @ResponseBody
     public String saveOrUpdate(Integer opt,HttpServletRequest req){
         JSONObject result=new JSONObject();
@@ -101,7 +102,7 @@ public class GroupController {
         return JSONObject.toJSONString(result);
     }
     @RequestMapping(value = "/delete",produces = {"text/html;charset=UTF-8"})
-    @Permission(id = 1003,parent = 1000,type = PermissionInfo.TYPE_BUTTON,name = "删除用户组",icon = "",sort = 1003)
+    @Permission(id = PCons.GR3,parent = PCons.MENU_GROUP,type = PermissionInfo.TYPE_BUTTON,name = "删除用户组",icon = "",sort = PCons.GR3)
     @ResponseBody
     public String delete(Integer id){
         JSONObject result=new JSONObject();
@@ -122,7 +123,7 @@ public class GroupController {
         return JSONObject.toJSONString(result);
     }
     @RequestMapping(value = "/batDelete",produces = {"text/html;charset=UTF-8"})
-    @Permission(id = 1004,parent = 1000,type = PermissionInfo.TYPE_BUTTON,name = "批量删除用户组",icon = "",sort = 1004)
+    @Permission(id = PCons.GR4,parent = PCons.MENU_GROUP,type = PermissionInfo.TYPE_BUTTON,name = "批量删除用户组",icon = "",sort = PCons.GR4)
     @ResponseBody
     public String batDelete(String ids){
         JSONObject result=new JSONObject();
@@ -143,7 +144,7 @@ public class GroupController {
         return JSONObject.toJSONString(result);
     }
     @RequestMapping("/checkGroupUser")
-    @Permission(id = 1005,parent = 1000,type = PermissionInfo.TYPE_BUTTON,name = "查看组用户",icon = "",sort = 1005)
+    @Permission(id = PCons.GR5,parent = PCons.MENU_GROUP,type = PermissionInfo.TYPE_BUTTON,name = "查看组用户",icon = "",sort = PCons.GR5)
     public ModelAndView checkGroupUser(Integer groupId){
         ModelAndView mv=new ModelAndView("/group/group_user_list");
         if (groupId == null) {
@@ -155,7 +156,7 @@ public class GroupController {
         return mv;
     }
     @RequestMapping(value = "/group_auth.html")
-    @Permission(id = 1006,parent = 1000,type = PermissionInfo.TYPE_BUTTON,name = "编辑组权限",icon = "",sort = 1006)
+    @Permission(id = PCons.GR6,parent = PCons.MENU_GROUP,type = PermissionInfo.TYPE_BUTTON,name = "编辑组权限",icon = "",sort = PCons.GR6)
     public ModelAndView toAuthList(int id) {
         ModelAndView mav = new ModelAndView("group/group_auth");
         mav.addObject("nodeAuth", AppStart.nodeAuth);
@@ -171,7 +172,7 @@ public class GroupController {
      * @since 2015年12月22日 下午2:55:35
      */
     @RequestMapping(value = "/updateGroupAuth",produces = {"text/html;charset=UTF-8"})
-    @Permission(id = 1007,parent = 1000,type = PermissionInfo.TYPE_BUTTON,name = "更新组权限",icon = "",sort = 1007)
+    @Permission(id = PCons.GR7,parent = PCons.MENU_GROUP,type = PermissionInfo.TYPE_BUTTON,name = "更新组权限",icon = "",sort = PCons.GR7)
     @ResponseBody
     public String updateGroupAuth(int gid, String pIds, HttpServletRequest req) {
         JSONObject result=new JSONObject();

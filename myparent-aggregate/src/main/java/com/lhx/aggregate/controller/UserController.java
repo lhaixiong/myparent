@@ -5,6 +5,7 @@ import com.lhx.aggregate.authority.Permission;
 import com.lhx.aggregate.authority.PermissionInfo;
 import com.lhx.aggregate.config.AppConstant;
 import com.lhx.aggregate.config.AppStart;
+import com.lhx.aggregate.config.PCons;
 import com.lhx.aggregate.entity.User;
 import com.lhx.aggregate.service.GroupService;
 import com.lhx.aggregate.service.UserAuthService;
@@ -25,7 +26,7 @@ import java.util.Set;
 
 @Controller
 @RequestMapping("/user")
-@Permission(id = 10,parent = 0,type = PermissionInfo.TYPE_NODE,name = "后台管理",icon = "",sort = 10)
+@Permission(id = PCons.NODE_ONE,parent = PCons.ROOT,type = PermissionInfo.TYPE_NODE,name = "后台管理",icon = "",sort = PCons.NODE_ONE)
 public class UserController {
     private static final Logger log= LoggerFactory.getLogger(UserController.class);
     @Autowired
@@ -35,7 +36,7 @@ public class UserController {
     @Autowired
     private UserAuthService userAuthService;
     @RequestMapping("/list")
-    @Permission(id = 1100,parent = 10,type = PermissionInfo.TYPE_MENU,name = "用户管理",icon = "",sort = 1100)
+    @Permission(id = PCons.MENU_USER,parent = PCons.NODE_ONE,type = PermissionInfo.TYPE_MENU,name = "用户管理",icon = "",sort = PCons.MENU_USER)
     public ModelAndView list(HttpServletRequest req){
         Map<String, String> params = ReqUtil.getParamMap(req);
         ModelAndView mv=new ModelAndView("/user/user_list");
@@ -44,7 +45,7 @@ public class UserController {
         return mv;
     }
     @RequestMapping("/detail")
-    @Permission(id = 1101,parent = 1100,type = PermissionInfo.TYPE_BUTTON,name = "用户页面",icon = "",sort = 1101)
+    @Permission(id = PCons.USER1,parent = PCons.MENU_USER,type = PermissionInfo.TYPE_BUTTON,name = "用户页面",icon = "",sort = PCons.USER1)
     public ModelAndView detail(Integer id,Integer opt){
         ModelAndView mv=new ModelAndView("/user/user_detail");
         User user=null;
@@ -62,7 +63,7 @@ public class UserController {
         return mv;
     }
     @RequestMapping(value = "/saveOrUpdate",produces = {"text/html;charset=UTF-8"})
-    @Permission(id = 1102,parent = 1100,type = PermissionInfo.TYPE_BUTTON,name = "添加或修改用户",icon = "",sort = 1102)
+    @Permission(id = PCons.USER2,parent = PCons.MENU_USER,type = PermissionInfo.TYPE_BUTTON,name = "添加或修改用户",icon = "",sort = PCons.USER2)
     @ResponseBody
     public String saveOrUpdate(Integer opt,HttpServletRequest req){
         JSONObject result=new JSONObject();
@@ -86,7 +87,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/delete",produces = {"text/html;charset=UTF-8"})
-    @Permission(id = 1103,parent = 1100,type = PermissionInfo.TYPE_BUTTON,name = "删除用户",icon = "",sort = 1103)
+    @Permission(id = PCons.USER3,parent = PCons.MENU_USER,type = PermissionInfo.TYPE_BUTTON,name = "删除用户",icon = "",sort = PCons.USER3)
     @ResponseBody
     public String delete(Integer id){
         JSONObject result=new JSONObject();
@@ -104,7 +105,7 @@ public class UserController {
         return JSONObject.toJSONString(result);
     }
     @RequestMapping(value = "/batDelete",produces = {"text/html;charset=UTF-8"})
-    @Permission(id = 1104,parent = 1100,type = PermissionInfo.TYPE_BUTTON,name = "批量删除用户",icon = "",sort = 1104)
+    @Permission(id = PCons.USER4,parent = PCons.MENU_USER,type = PermissionInfo.TYPE_BUTTON,name = "批量删除用户",icon = "",sort = PCons.USER4)
     @ResponseBody
     public String batDelete(String ids){
         JSONObject result=new JSONObject();
@@ -123,7 +124,7 @@ public class UserController {
         return JSONObject.toJSONString(result);
     }
     @RequestMapping(value = "/toUserAuth")
-    @Permission(id = 1105,parent = 1100,type = PermissionInfo.TYPE_BUTTON,name = "编辑用户权限",icon = "",sort = 1105)
+    @Permission(id = PCons.USER5,parent = PCons.MENU_USER,type = PermissionInfo.TYPE_BUTTON,name = "编辑用户权限",icon = "",sort = PCons.USER5)
     public ModelAndView toUserAuth(int userId) {
         ModelAndView mav = new ModelAndView("user/user_auth");
         mav.addObject("nodeAuth", AppStart.nodeAuth);
@@ -138,7 +139,7 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/updateUserAuth",produces = {"text/html;charset=UTF-8"})
-    @Permission(id = 1106,parent = 1100,type = PermissionInfo.TYPE_BUTTON,name = "更新用户权限",icon = "",sort = 1106)
+    @Permission(id = PCons.USER6,parent = PCons.MENU_USER,type = PermissionInfo.TYPE_BUTTON,name = "更新用户权限",icon = "",sort = PCons.USER6)
     @ResponseBody
     public String updateUserAuth(int userId, String pIds, HttpServletRequest req) {
         JSONObject result=new JSONObject();

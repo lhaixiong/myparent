@@ -5,8 +5,6 @@ import java.util.List;
 /**
  * 分页
  * 
- * @since 2015年5月14日 下午5:02:38
- * @author yaowenhao
  */
 public class PageBean<T> {
 

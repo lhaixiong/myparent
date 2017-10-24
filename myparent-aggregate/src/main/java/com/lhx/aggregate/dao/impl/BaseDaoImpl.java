@@ -112,7 +112,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     }
 
     @Override
-    public PageBean<T> find(String hql, int pageNum, int pageSize) {
+    public PageBean<T> find(String hql,String clz, int pageNum, int pageSize) {
         if(pageNum<1||pageSize<1){
             String err=String.format("分页参数错误{pageNum:%s,pageSize:%s}",pageNum,pageSize);
             log.error(err);
@@ -122,16 +122,8 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
         List<T> result = query.setFirstResult((pageNum - 1) * pageSize).setMaxResults(pageSize).list();
 
         PageBean<T> pageBean=new PageBean<>();
-        int index=hql.toUpperCase().indexOf("ORDER BY");
-        String countHql=hql;
-        if (index>0) {
-            countHql=hql.substring(0,index);
-        }
-        int idx=countHql.toUpperCase().indexOf("FROM");
-        if (idx>0) {
-            countHql=countHql.substring(index);
-        }
-        query=getCurrentSession().createQuery("select count(*) from "+countHql);
+
+        query=getCurrentSession().createQuery("select count(*) from "+clz);
         Object count = query.uniqueResult();
 
         pageBean.setResult(result);
@@ -145,7 +137,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     }
 
     @Override
-    public PageBean<T> find(String hql, Map<String, Object> params, int pageNum, int pageSize) {
+    public PageBean<T> find(String hql,String clz, Map<String, Object> params, int pageNum, int pageSize) {
         if(pageNum<1||pageSize<1){
             String err=String.format("分页参数错误{pageNum:%s,pageSize:%s}",pageNum,pageSize);
             log.error(err);
@@ -160,16 +152,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
         List<T> result = query.setFirstResult((pageNum - 1) * pageSize).setMaxResults(pageSize).list();
 
         PageBean<T> pageBean=new PageBean<>();
-        int index=hql.toUpperCase().indexOf("ORDER BY");
-        String countHql=hql;
-        if (index>0) {
-            countHql=hql.substring(0,index);
-        }
-        int idx=countHql.toUpperCase().indexOf("FROM");
-        if (idx>0) {
-            countHql=countHql.substring(index);
-        }
-        query=getCurrentSession().createQuery("select count(*) from "+countHql);
+        query=getCurrentSession().createQuery("select count(*) from "+clz);
         if (params != null && !params.isEmpty()) {
             for (String key : params.keySet()) {
                 query.setParameter(key, params.get(key));
@@ -189,13 +172,13 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
     @Override
     public long count() {
-        Query query=getCurrentSession().createQuery("select count(*) from " + clz.getName());
+        Query query=getCurrentSession().createQuery("select count(*) from " + clz.getSimpleName());
         return (long) query.uniqueResult();
     }
 
     @Override
     public long count(String hql, Map<String, Object> params) {
-        Query query=getCurrentSession().createQuery("select count(*) from " + clz.getName());
+        Query query=getCurrentSession().createQuery("select count(*) from " + clz.getSimpleName());
         if (params != null&&!params.isEmpty()) {
             for (String key : params.keySet()) {
                 query.setParameter(key,params.get(key));

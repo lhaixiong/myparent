@@ -84,7 +84,7 @@ public interface BaseDao<T> {
      * @param pageSize
      * @return
      */
-    PageBean<T> find(String hql,int pageNum,int pageSize);
+    PageBean<T> find(String hql,String clz,int pageNum,int pageSize);
 
     /**
      * 带条件的分页查询
@@ -94,7 +94,7 @@ public interface BaseDao<T> {
      * @param pageSize
      * @return
      */
-    PageBean<T> find(String hql,Map<String,Object> params,int pageNum,int pageSize);
+    PageBean<T> find(String hql,String clz,Map<String,Object> params,int pageNum,int pageSize);
 
     /**
      * 总记录数
@@ -124,5 +124,10 @@ public interface BaseDao<T> {
      */
     int excuteSql(String sql);
 
+    /**
+     * 通过id获取一个对象
+     * @param id
+     * @return
+     */
     T getById(Serializable id);
 }

@@ -30,7 +30,7 @@
                 <div class="form-group">
                     <label for="password" class="col-sm-3 control-label">密码:</label>
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" id="password" name="password" value="${item.password}" placeholder="请输入密码">
+                        <input type="password" class="form-control" id="password" name="password" value="${item.password}" placeholder="有输入密码则更新,否则不更新">
                     </div>
                 </div>
 

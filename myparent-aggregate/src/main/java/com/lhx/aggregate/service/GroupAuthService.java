@@ -1,9 +1,5 @@
 package com.lhx.aggregate.service;
 
-import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.lhx.aggregate.config.AppConstant;
 import com.lhx.aggregate.dao.impl.GroupAuthDao;
 import com.lhx.aggregate.dao.impl.GroupDao;
@@ -17,6 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 
 @Service
@@ -95,20 +94,25 @@ public class GroupAuthService {
 			for (User user : groupUsers) {
 				String tempHql = "From UserAuth Where userId = " + user.getId();
 				List<UserAuth> userAuths = userAuthDao.find(tempHql);
-				if ((null == userAuths || 0 == userAuths.size())&&group.getType()!=AppConstant.GROUP_ADMIN) {
-					continue;
-				}
-				for (UserAuth userAuth : userAuths) {
-					if (oldShouldBeDeleted.contains(userAuth.getPermisssionId())) {
-						userAuthDao.delete(userAuth);
+//				if ((null == userAuths || 0 == userAuths.size())&&group.getType()!=AppConstant.GROUP_ADMIN) {
+//					continue;
+//				}
+				if(userAuths!=null&&!userAuths.isEmpty()){
+					for (UserAuth userAuth : userAuths) {
+						//用户权限中,删掉组变少的权限
+						if (oldShouldBeDeleted.contains(userAuth.getPermisssionId())) {
+							userAuthDao.delete(userAuth);
+						}
 					}
 				}
+
 				userAuths = userAuthDao.find(tempHql);
 				Set<Integer> userAuthPidSet = new HashSet<Integer>();
 				for (UserAuth userAuth : userAuths) {
 					userAuthPidSet.add(userAuth.getPermisssionId());
 				}
 				for (Integer newPid : newPidSet) {
+					//用户权限中,增加组变多的权限
 					if (!userAuthPidSet.contains(newPid)) {
 						UserAuth ua = new UserAuth();
 						ua.setCreater(loginUser.getId());

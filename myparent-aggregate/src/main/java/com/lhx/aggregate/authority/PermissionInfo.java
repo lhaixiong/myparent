@@ -73,7 +73,7 @@ public class PermissionInfo {
         this.icon = p.icon();
         this.sort = p.sort();
         this.btnUrls=new HashSet<>();
-        if(ctrUrls.length<1){
+        if(ctrUrls.length<1){//控制器上没有@RequestMapping注解
             this.accessUrl=methodUrls[0];
             for (String methodUrl : methodUrls) {
                 btnUrls.add(methodUrl);

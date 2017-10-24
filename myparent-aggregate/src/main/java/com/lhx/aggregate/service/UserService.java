@@ -9,6 +9,7 @@ import com.lhx.aggregate.entity.Group;
 import com.lhx.aggregate.entity.GroupAuth;
 import com.lhx.aggregate.entity.User;
 import com.lhx.aggregate.entity.UserAuth;
+import com.lhx.aggregate.tools.MD5Util;
 import com.lhx.aggregate.tools.ReqUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class UserService {
     public User getLoginUser(String account, String password) {
         Map<String,Object> params=new HashMap<>();
         params.put("account",account);
-        params.put("password",password);
+        params.put("password",MD5Util.MD5Encode(password));
         String hql="from User t where t.account=:account and password=:password";
         return dao.getOne(hql,params);
     }
@@ -69,7 +70,7 @@ public class UserService {
         if (opt== AppConstant.OPT_ADD) {
             User user=new User();
             user.setAccount(paramMap.get("account"));
-            user.setPassword(paramMap.get("password"));
+            user.setPassword(MD5Util.MD5Encode(paramMap.get("password")));
             user.setNickname(paramMap.get("nickname"));
             user.setStatus(Integer.parseInt(paramMap.get("status")));
             user.setGroupId(Integer.parseInt(paramMap.get("groupId")));
@@ -83,7 +84,10 @@ public class UserService {
             User user=dao.getById(id);
             int oldGroupId=user.getGroupId();
             user.setAccount(paramMap.get("account"));
-            user.setPassword(paramMap.get("password"));
+            String pwd=paramMap.get("password");
+            if (StringUtils.isNotEmpty(pwd)) {
+                user.setPassword(MD5Util.MD5Encode(pwd));
+            }
             user.setNickname(paramMap.get("nickname"));
             user.setStatus(Integer.parseInt(paramMap.get("status")));
             user.setGroupId(newGroupId);
