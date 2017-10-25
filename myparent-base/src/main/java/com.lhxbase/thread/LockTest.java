@@ -5,13 +5,13 @@ import java.util.Date;
 查看菜鸟教程死锁：http://www.runoob.com/java/thread-deadlock.html
  */
 public class LockTest {
-    public static String obj1 = "obj1";
-    public static String obj2 = "obj2";
+    public static Object obj1 = new Object();
+    public static Object obj2 = new Object();
     public static void main(String[] args) {
         LockA la = new LockA();
-        new Thread(la).start();
+        new Thread(la,"AAAA").start();
         LockB lb = new LockB();
-        new Thread(lb).start();
+        new Thread(lb,"bbb").start();
     }
 }
 class LockA implements Runnable{

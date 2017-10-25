@@ -1,9 +1,6 @@
 package com.lhx.aggregate.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,7 +12,7 @@ import java.util.Date;
 public class UserAuth implements Serializable{
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int userId;//用户id
     private int permisssionId;//权限id

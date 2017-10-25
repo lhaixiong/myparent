@@ -13,7 +13,7 @@ import java.util.Date;
 public class OperateLog implements Serializable{
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;// 主键
     private Date date;// 日期
     private int creater;// 操作用户

@@ -398,8 +398,10 @@ public class Jdk8Test {
 //        System.out.println("sum："+ sum);
 //        System.out.println("耗时："+ Duration.between(start,end).toMillis());//1903
 
+
         Instant start = Instant.now();
-        long sum = LongStream.range(0, 1000000000L)
+//        long sum = LongStream.range(0, 1000000L) //左闭右开区间[0,1000000)
+        long sum = LongStream.rangeClosed(0, 1000000L) //闭区间[0,1000000]
                 .parallel()//并行流
                 .reduce(0,Long::sum);
         Instant end = Instant.now();

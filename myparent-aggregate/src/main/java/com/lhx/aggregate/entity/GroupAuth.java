@@ -1,11 +1,7 @@
 package com.lhx.aggregate.entity;
 
+import javax.persistence.*;
 import java.util.Date;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  * 用户组权限关系
@@ -15,7 +11,7 @@ import javax.persistence.Table;
 @Table(name = "group_auth")
 public class GroupAuth {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id; // id
 	private int groupId; // 用户组ID
 	private int permissionId; // 权限id

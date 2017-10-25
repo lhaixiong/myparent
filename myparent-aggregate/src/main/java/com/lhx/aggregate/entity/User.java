@@ -15,7 +15,7 @@ import java.util.Date;
 public class User implements Serializable{
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(length = 20)
     private String account;//账号
