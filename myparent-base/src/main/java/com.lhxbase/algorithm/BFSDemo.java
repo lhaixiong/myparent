@@ -34,7 +34,7 @@ public class BFSDemo {
             Node node = queue.poll();
             if (node != null) {
                 node.setVisited(true);
-                System.out.println(node.getContent()+"被访问");
+                System.out.println(node+"  被访问");
                 for (Node child : node.getChilds()) {
                     if(!child.isVisited){
                         queue.offer(child);
