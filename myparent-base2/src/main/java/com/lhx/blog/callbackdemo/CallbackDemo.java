@@ -65,7 +65,7 @@ public class CallbackDemo {
 	}
 
 	static class Answerer {
-		public void dealProblem(Questioner questioner, String question) {
+		public void dealProblem(Callback callback, String question) {
 			System.out.println(this+"收到的问题是:" + question);
 			System.out.println(this+"容我想一下");
 			// 需要时间，模拟业务处理
@@ -75,7 +75,7 @@ public class CallbackDemo {
 			String result = "2";
 			// 通知提问者获取结果
             //B类调用A类的某个方法
-			questioner.getResult(result);
+			callback.getResult(result);
 		}
 	}
 }
