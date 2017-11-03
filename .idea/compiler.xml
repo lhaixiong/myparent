@@ -26,6 +26,7 @@
         <module name="myparent-base" />
         <module name="myparent-base2" />
         <module name="myparent-mina" />
+        <module name="myparent-mvc" />
         <module name="myparent-s2" />
         <module name="myparent-s3" />
         <module name="myparent-sh" />
