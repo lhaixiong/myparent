@@ -5,12 +5,17 @@ import com.lhx.mvc.aop.assist.ProceedingJoinPoint;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class AroundProcess implements IAopProcess {
+public class AroundProcess implements IAopProcess,Comparable<AroundProcess>{
     private Object aspect;
 
     private Method method;
 
     private ProceedingJoinPoint joinPoint;
+
+    /**
+     * 优先级
+     */
+    private int order;
 
     public AroundProcess() {
     }
@@ -46,5 +51,18 @@ public class AroundProcess implements IAopProcess {
 
     public void setJoinPoint(ProceedingJoinPoint joinPoint) {
         this.joinPoint = joinPoint;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    @Override
+    public int compareTo(AroundProcess o) {
+        return this.order-o.getOrder();
     }
 }

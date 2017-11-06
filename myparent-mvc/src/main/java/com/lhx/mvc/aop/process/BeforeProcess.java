@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
  * before处理对象
  * 含切面对象aspect，切面方法method，对应的切点信息JoinPoint
  */
-public class BeforeProcess implements IAopProcess{
+public class BeforeProcess implements IAopProcess,Comparable<BeforeProcess>{
     /**
      * 切面类
      */
@@ -21,6 +21,11 @@ public class BeforeProcess implements IAopProcess{
      * 被切面拦截的切点信息
      */
     private JoinPoint joinPoint;
+
+    /**
+     * 优先级
+     */
+    private int order;
 
     public BeforeProcess(){
 
@@ -61,4 +66,19 @@ public class BeforeProcess implements IAopProcess{
     public void setJoinPoint(JoinPoint joinPoint) {
         this.joinPoint = joinPoint;
     }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+
+    @Override
+    public int compareTo(BeforeProcess o) {
+        return this.order-o.getOrder();
+    }
+
 }

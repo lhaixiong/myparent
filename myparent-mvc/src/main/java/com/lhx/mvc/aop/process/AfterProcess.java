@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
  * 含切面对象aspect，切面方法method，对应的切点信息JoinPoint
  * 相交于BeforeProcess，应该多一个返回结果的参数
  */
-public class AfterProcess implements IAopProcess{
+public class AfterProcess implements IAopProcess,Comparable<AfterProcess>{
     /**
      * 切面类
      */
@@ -23,6 +23,10 @@ public class AfterProcess implements IAopProcess{
      */
     private JoinPoint joinPoint;
     private Object result;
+    /**
+     * 优先级
+     */
+    private int order;
 
     public AfterProcess(){
 
@@ -73,5 +77,18 @@ public class AfterProcess implements IAopProcess{
 
     public void setResult(Object result) {
         this.result = result;
+    }
+
+    @Override
+    public int compareTo(AfterProcess o) {
+        return order-o.order;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 }

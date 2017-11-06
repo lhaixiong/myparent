@@ -24,8 +24,11 @@ public class MyCglibProxy implements MethodInterceptor {
         joinPoint.setParams(objects);
 
         processBeforeAdvice(joinPoint);
+
         Object result=processAroundAdvice(joinPoint,methodProxy);
+
         processAfterAdvice(joinPoint,result);
+        
         System.out.println("cglib代理结束");
         return result;
     }

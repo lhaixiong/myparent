@@ -1,13 +1,15 @@
 package com.lhx.mvc.test;
 
+import com.lhx.mvc.aop.MyCglibProxyFactory;
 import com.lhx.mvc.ioc.ApplicationContext;
 
 public class Test {
     public static void main(String[] args) {
         ApplicationContext ctx=new ApplicationContext();
         AspectDemoService aspectDemoService= (AspectDemoService) ctx.getBean("aspectDemoService");
+        aspectDemoService=MyCglibProxyFactory.getProxy(AspectDemoService.class);
         System.out.println("------------\n");
-        aspectDemoService.print("aspectdemoservice------");
+        aspectDemoService.print("adfda aspectdemoservice------f fjkjgkfjkj");
         System.out.println("------------\n");
 
 
