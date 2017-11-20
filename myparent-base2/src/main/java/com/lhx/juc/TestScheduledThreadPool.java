@@ -1,11 +1,7 @@
 package com.lhx.juc;
 
 import java.util.Random;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * 一、线程池：提供了一个线程队列，队列中保存着所有等待状态的线程。避免了创建与销毁额外开销，提高了响应的速度。
@@ -38,13 +34,36 @@ public class TestScheduledThreadPool {
 					System.out.println(Thread.currentThread().getName() + " : " + num);
 					return num;
 				}
-				
+
 			}, 1, TimeUnit.SECONDS);
-			
+
 			System.out.println(result.get());
 		}
-		
 		pool.shutdown();
+
+		//pool.scheduleAtFixedRate(new Runnable() {
+		//	@Override
+		//	public void run() {
+		//		int num = new Random().nextInt(100);//生成随机数
+		//		System.out.println(Thread.currentThread().getName() + " : " + num);
+		//	}
+        //
+		//}, 1, 2, TimeUnit.SECONDS);
+
+		//ScheduledFuture<?> future = pool.scheduleWithFixedDelay(new Runnable() {
+		//	@Override
+		//	public void run() {
+		//		int num = new Random().nextInt(100);//生成随机数
+		//		System.out.println(Thread.currentThread().getName() + " : " + num);
+		//	}
+        //
+		//}, 1, 2, TimeUnit.SECONDS);
+		//注意：这里周期性定时任务无须调用pool.shutdown()方法，否则定时器不执行，原因是因为定时任务延迟1秒提交执行，而在提交前先shutdown了，定时器也就不执行了
+		//pool.shutdown();
+		//这里可以用future.get()无限阻塞main线程，故maiiiii永远不打印
+		//future.get();
+		//System.out.println("maiiiiii");
+
 	}
 	
 }
