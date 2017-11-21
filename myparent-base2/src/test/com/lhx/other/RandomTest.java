@@ -4,8 +4,49 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class RandomTest {
+    private static int N=8;
+    public static void main(String[] args) {
+        int[] a = new int[N];
+        Scanner s = new Scanner(System.in);
+        int index1 = 0, index2 = 0;
+
+        System.out.println("please input numbers");
+        for (int i = 0; i < N; i++) {
+            a[i] = s.nextInt();
+            System.out.print(a[i] + " ");
+        }
+
+        int max = a[0], min = a[0];
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] > max) {
+                max = a[i];
+                index1 = i;
+            }
+            if (a[i] < min) {
+                min = a[i];
+                index2 = i;
+            }
+        }
+
+        if (index1 != 0) {
+            int temp = a[0];
+            a[0] = a[index1];
+            a[index1] = temp;
+        }
+
+        if (index2 != a.length - 1) {
+            int temp = a[a.length - 1];
+            a[a.length - 1] = a[index2];
+            a[index2] = temp;
+        }
+        System.out.println("after swop:");
+        for (int i = 0; i < a.length; i++) {
+            System.out.print(a[i] + " ");
+        }
+    }
     /**
      * 测试集合的add方法和addAll方法
      * @throws Exception
