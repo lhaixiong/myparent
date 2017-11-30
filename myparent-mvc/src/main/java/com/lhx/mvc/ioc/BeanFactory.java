@@ -47,6 +47,9 @@ public class BeanFactory {
      * <p>
      * key 为@Aspect标记的的class切面对象
      * value 为该注解所对应的所有通知集合
+     *
+     * key:service.method上的注解AnnotationType,例如LogDot,v:有该注解的所有的Aspect类的通知集合，例如LogAspect、LogAspect2里的通知
+     *
      */
     private Map<Class, ProcessCollect> aspectAnoMap;
 

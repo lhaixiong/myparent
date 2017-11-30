@@ -54,6 +54,7 @@ public class Producer2 {
         this.messageProducer.send(destination,mapMsg2,DeliveryMode.NON_PERSISTENT,5,1000*60*10L);
         this.messageProducer.send(destination,mapMsg3,DeliveryMode.NON_PERSISTENT,9,1000*60*10L);
         this.messageProducer.send(destination,mapMsg4,DeliveryMode.NON_PERSISTENT,3,1000*60*10L);
+
     }
 
     public void closeConnection() throws JMSException {

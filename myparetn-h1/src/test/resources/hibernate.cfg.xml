@@ -30,12 +30,12 @@
         <!--<property name="c3p0.idle_test_period">120</property>-->
 
         <!--<property name="hibernate.connection.provider_class">org.hibernate.c3p0.internal.C3P0ConnectionProvider</property>-->
-        <property name="hibernate.c3p0.max_size">10</property>
-        <property name="hibernate.c3p0.min_size">5</property>
-        <property name="c3p0.acquire_increment">2</property>
-        <property name="c3p0.idle_test_period">2000</property>
-        <property name="c3p0.timeout">2000</property>
-        <property name="c3p0.max_statements">10</property>
+        <!--<property name="hibernate.c3p0.max_size">10</property>-->
+        <!--<property name="hibernate.c3p0.min_size">5</property>-->
+        <!--<property name="c3p0.acquire_increment">2</property>-->
+        <!--<property name="c3p0.idle_test_period">2000</property>-->
+        <!--<property name="c3p0.timeout">2000</property>-->
+        <!--<property name="c3p0.max_statements">10</property>-->
 
         <!--启用二级缓存-->
         <property name="cache.use_second_level_cache">true</property>

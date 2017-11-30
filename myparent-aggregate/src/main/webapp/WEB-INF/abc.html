@@ -9,6 +9,53 @@
     <div id="abc">abc</div>
     <div><div id="b" data="bb" style="background-color: #ff0000" onclick="bbClick(this)">bb</div></div>
 <script>
+
+    var num=111;
+    function f1(){
+        var num=999;
+        return function(){
+            alert(num);
+        }
+        //以上return等同于下面
+//        function f2(){
+//            alert(num);
+//        }
+       //return f2;
+    }
+    var result=f1();
+    result();//999;
+
+    var name="the window";
+    var obj={
+        name:"the obj",
+        getName:function(){
+            var name="function name"
+            console.info("1..."+this.name);
+            var that=this;
+            return function(){
+                console.info("2..."+that.name);
+                console.info("3..."+this.name);
+                return name;
+            }
+        }
+    }
+    console.info(obj.getName()())
+
+    var name="the window";
+    var obj={
+        name:"the obj",
+        getName:function(){
+            var name="function name"
+            console.info(this.name);//the obj
+            function f2(){
+                console.info(this.name);//the window
+                return this.name;
+            }
+            return f2;
+        }
+    }
+    console.info(obj.getName()())//the window
+
     function bbClick(me){
         console.info(me);
         console.info(me.clientHeight);

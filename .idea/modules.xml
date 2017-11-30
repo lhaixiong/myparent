@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/myparent-base2/myparent-base2.iml" filepath="$PROJECT_DIR$/myparent-base2/myparent-base2.iml" />
       <module fileurl="file://$PROJECT_DIR$/myparent-mina/myparent-mina.iml" filepath="$PROJECT_DIR$/myparent-mina/myparent-mina.iml" />
       <module fileurl="file://$PROJECT_DIR$/myparent-mvc/myparent-mvc.iml" filepath="$PROJECT_DIR$/myparent-mvc/myparent-mvc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myparent-mybatis/myparent-mybatis.iml" filepath="$PROJECT_DIR$/myparent-mybatis/myparent-mybatis.iml" />
       <module fileurl="file://$PROJECT_DIR$/myparent-s2/myparent-s2.iml" filepath="$PROJECT_DIR$/myparent-s2/myparent-s2.iml" />
       <module fileurl="file://$PROJECT_DIR$/myparent-s3/myparent-s3.iml" filepath="$PROJECT_DIR$/myparent-s3/myparent-s3.iml" />
       <module fileurl="file://$PROJECT_DIR$/myparent-sh/myparent-sh.iml" filepath="$PROJECT_DIR$/myparent-sh/myparent-sh.iml" />

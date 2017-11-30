@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- "configuration" 的子元素必须按顺序配置 "
+    (properties?,
+    settings?,
+    typeAliases?,
+    typeHandlers?,
+    objectFactory?,
+    objectWrapperFactory?,
+    plugins?,
+    environments?,
+    databaseIdProvider?,
+    mappers?)"。-->
+    <!-- 指定properties配置文件， 我这里面配置的是数据库相关 -->
+    <properties resource="dbConfig.properties"></properties>
+
+    <!-- 指定Mybatis使用log4j -->
+    <settings>
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
+
+    <typeAliases>
+        <!--
+        通过package, 可以直接指定package的名字， mybatis会自动扫描你指定包下面的javabean,
+        并且默认设置一个别名，默认的名字为： javabean 的首字母小写的非限定类名来作为它的别名。
+        也可在javabean 加上注解@Alias 来自定义别名， 例如： @Alias(user)
+        <package name="com.dy.entity"/>
+        -->
+        <typeAlias alias="UserEntity" type="com.lhx.mybaits.entity.User"/>
+    </typeAliases>
+
+    <typeHandlers>
+        <!--无论是 MyBatis 在预处理语句（PreparedStatement）中设置一个参数时，还是从结果集中取出一个值时，-->
+        <!--都会用类型处理器将获取的值以合适的方式转换成 Java 类型。Mybatis默认为我们实现了许多TypeHandler, -->
+        <!--当我们没有配置指定TypeHandler时，Mybatis会根据参数或者返回结果的不同，默认为我们选择合适的TypeHandler处理。-->
+    <!--
+        当配置package的时候，mybatis会去配置的package扫描TypeHandler
+        <package name="com.dy.demo"/>
+     -->
+
+    <!-- handler属性直接配置我们要指定的TypeHandler -->
+    <!--<typeHandler handler=""/>-->
+
+    <!-- javaType 配置java类型，例如String, 如果配上javaType, 那么指定的typeHandler就只作用于指定的类型 -->
+    <!--<typeHandler javaType="" handler=""/>-->
+
+    <!-- jdbcType 配置数据库基本数据类型，例如varchar, 如果配上jdbcType, 那么指定的typeHandler就只作用于指定的类型  -->
+    <!--<typeHandler jdbcType="" handler=""/>-->
+
+    <!-- 也可两者都配置 -->
+    <!--<typeHandler javaType="" jdbcType="" handler=""/>-->
+    </typeHandlers>
+
+    <environments default="development">
+        <!-- 指定一个environment(不同环境用不同数据库，开发、测试、生产环境) -->
+        <!-- 指定一个开发environment -->
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <!--
+                 如果上面没有指定数据库配置的properties文件，那么此处可以这样直接配置
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/mybatis"/>
+                <property name="username" value="root"/>
+                <property name="password" value="root"/>
+                -->
+
+                <!-- 上面指定了数据库配置文件， 配置文件里面也是对应的这四个属性 -->
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+
+        <!-- 我再指定一个测试environment -->
+        <environment id="test">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <!-- 与上面的url不一样 -->
+                <property name="url" value="jdbc:mysql://localhost:3306/mybatis-test"/>
+                <property name="username" value="root"/>
+                <property name="password" value="root"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!-- 映射文件，mybatis精髓， 后面才会细讲 -->
+    <mappers>
+        <mapper resource="com/lhx/mybatis/dao/userDao-mapping.xml"/>
+
+        <!-- 第一种方式：通过resource指定 -->
+        <!--<mapper resource="com/dy/dao/userDao.xml"/>-->
+
+        <!-- 第二种方式， 通过class指定接口，进而将接口与对应的xml文件形成映射关系
+             不过，使用这种方式必须保证 接口与mapper文件同名(不区分大小写)，
+             我这儿接口是UserDao,那么意味着mapper文件为UserDao.xml
+        <mapper class="com.dy.dao.UserDao"/>
+        -->
+
+        <!-- 第三种方式，直接指定包，自动扫描，与方法二同理
+        <package name="com.dy.dao"/>
+        -->
+        <!-- 第四种方式：通过url指定mapper文件位置
+        <mapper url="file://........"/>
+        -->
+    </mappers>
+</configuration>

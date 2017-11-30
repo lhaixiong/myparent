@@ -18,5 +18,6 @@
     <module>myparent-aggregate</module>
     <module>myparent-mina</module>
     <module>myparent-mvc</module>
+    <module>myparent-mybatis</module>
   </modules>
 </project>

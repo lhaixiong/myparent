@@ -16,9 +16,10 @@ public class TopicPublisher {
         MessageProducer producer = session.createProducer(topic);
         producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
+        long i=1;
         while(true) {
             TextMessage message = session.createTextMessage();
-            message.setText("message_" + System.currentTimeMillis());
+            message.setText("message_" + i++);
             producer.send(message);
             System.out.println("Sent message: " + message.getText());
 

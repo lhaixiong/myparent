@@ -4,6 +4,15 @@ import org.junit.Test;
 
 public class MyTest {
     @Test
+    public void test03(){
+        int n1=1;
+        int n2=n1;
+        n1=3;
+        System.out.println(n1);
+        System.out.println(n2);
+    }
+
+    @Test
     public void test02(){
         String abc="from Oper";
         int idx=abc.toUpperCase().indexOf("FROM");
