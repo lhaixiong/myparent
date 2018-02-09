@@ -1,3 +1,5 @@
+简单spring mvc项目
+
 优化点:
     页面模板建议采用velocity或者freemark.
 
