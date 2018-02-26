@@ -9,7 +9,8 @@ public class CASDemo {
                public void run() {
                    int v=cas.getV();
                    int newV=(int) (Math.random()*100);
-                   System.out.println(Thread.currentThread().getName()+"v:"+v+",new:"+newV+",cas:"+cas.cas(v, newV));
+                   System.out.println(Thread.currentThread().getName()+"before v:"+v+",newV:"+newV);
+                   System.out.println(Thread.currentThread().getName()+" cas result,"+cas.cas(v, newV));
                }
            }).start() ;
         }
@@ -24,9 +25,11 @@ public class CASDemo {
             boolean flag=false;
             int old=v;
             if(old==expectValue){
+                System.out.println(Thread.currentThread().getName()+" old:"+v+",expectValue:"+expectValue+",new:"+newValue+" aaaaaaaaaaa");
                 v=newValue;
                 flag=true;
             }
+            System.out.println(Thread.currentThread().getName()+" v:"+v+",expectValue:"+expectValue+",new:"+newValue);
             return flag;
         }
     }
