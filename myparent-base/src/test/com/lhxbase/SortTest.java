@@ -11,8 +11,8 @@ public class SortTest {
         for (int i=0;i<a.length;i++){
             System.out.print(a[i]+"   ");
         }
-        System.out.println("\n二分查找78在数组中的位置:"+Sort.binarySearch(a, 78, 0, a.length - 1));
-        System.out.println("二分查找0在数组中的位置:"+Sort.binarySearch(a, 0, 0, a.length - 1));
+        System.out.println("\n二分查找78在数组中的位置:"+Sort.binarySort(a, 78, 0, a.length - 1));
+        System.out.println("二分查找0在数组中的位置:"+Sort.binarySort(a, 0, 0, a.length - 1));
     }
     @Test
     public void testBubbleSort(){
