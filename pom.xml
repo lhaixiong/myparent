@@ -19,5 +19,6 @@
     <module>myparent-mina</module>
     <module>myparent-mvc</module>
     <module>myparent-mybatis</module>
+    <!-- <module>myparent-netty</module> -->
   </modules>
 </project>
