@@ -11,7 +11,7 @@
     <name>myparent-s2</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <springframework.version>4.1.1.RELEASE</springframework.version>
+        <springframework.version>5.2.7.RELEASE</springframework.version>
     </properties>
 
     <dependencies>
