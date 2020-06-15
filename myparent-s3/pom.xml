@@ -12,7 +12,7 @@
     <!--<url>http://maven.apache.org</url>-->
 
     <properties>
-        <springframework.version>4.2.3.RELEASE</springframework.version>
+        <springframework.version>5.2.7.RELEASE</springframework.version>
         <junit.version>4.11</junit.version>
         <jackson.version>2.6.3</jackson.version>
     </properties>
